@@ -303,7 +303,7 @@ boxplot (A, B, C, D, E, main = "NOTAS DE CADA GRUPO",
 
 **9. Si la variable conc recoge la concentración de plomo (en ppm) en el aire de cierta zona durante un dia completo.**
 
-**a)**  *¿Cuál ha sido la concentraci?n máxima?*
+**a)**  *¿Cuál ha sido la concentración máxima?*
 
 ```{r}
 max(conc)
@@ -1106,4 +1106,63 @@ b
 
 ```
 
+**13) El vector `co2` contiene medidas de  CO2 en la atmósfera, en unidades de ppm, durante el periodo 1959-1997. El vector `year` contiene sus años correspondientes.** 
 
+```{r}
+data(co2)
+means = aggregate(co2, FUN=mean)
+year = as.vector(time(means))
+co2 = as.vector(means)
+```
+
+* **Calcular un vector de diferencias de *CO2* entre años consecutivos, que sería:**
+ * *CO2* en 1960 menos *CO2* en 1959
+ * *CO2* en 1961 menos *CO2* en 1960 y así sucesivamente
+
+```{r}
+dato<-data.frame(year=year,nivel=round(co2,1)) %>% mutate(rest=c(nivel[2:39],0)) %>% mutate(Diferencia=rest-nivel)
+vect<-dato[1:38,4]
+vect
+```
+
+* **Crear un plot con lineas y puntos mostrando las diferencias consecutivas de *CO2* en función del tiempo (1960, 1961, etc), en *negrita* **
+
+```{r figura1, echo=FALSE}
+plot(x=year[2:39],y=vect,main="CO2 en la atmósfera en el periodo 1960-1997 ",xlab = "Años",ylab = "Variación de CO2 (ppm)",type="b",pch=(1),col="red",
+     font=4,bg="blue")
+```
+
+* **La diferencia de concentración de *CO2* entre 2020 y 2019 fue igual a 2.64. Agregar un punto rojo representando esa diferencia al plot ya creado (usar una forma diferente , como `pch=4`**
+
+```{r figura2, echo=FALSE}
+plot(x=year[2:39],y=vect,main="CO2 en la atmósfera en el periodo 1960-1997 ",xlab = "Años",ylab = "Variacion de CO2 (ppm)",xlim=c(1960,2020),ylim=c(0,3),type="b",pch=(1),col="red",
+     font=4,bg="blue")
+points(2020,2.64,col="blue",pch=4)
+```
+
+**14) Lee el archivo `rainfall.csv` como un `data.frame**
+
+```{r}
+data_R<-read.csv("https://raw.githubusercontent.com/ryali93/ProgramacionR/master/data/rainfall.csv")
+head(data_R)
+```
+
+* Calcula e imprime un vector con los nombres de las estaciones donde al menos uno de los meses tiene una precipitación superior a 180mm *
+
+```{r}
+library(tidyr)
+library(dplyr)
+r_ga<-gather(data = data_R, key = "Meses", value = "precipitacion", 3:11)
+head(r_ga)
+```
+
+Se uso el paquete  `tidyr`, que contiene una serie de funciones que permiten ordenar la estructura de una base de datos. Para mayor información visitar el link <http://www.jstatsoft.org/v59/i10/paper>
+La funcion `gather` une varios columnas de acuerdo a un valor determinado, parametro o key
+
+```{r message=FALSE}
+library(dplyr)
+```
+
+``` {r}
+r_f<-filter(r_ga,precipitacion >180)
+r_f
