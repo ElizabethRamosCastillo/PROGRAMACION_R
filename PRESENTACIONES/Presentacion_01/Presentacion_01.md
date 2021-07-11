@@ -301,6 +301,9 @@ boxplot (A, B, C, D, E, main = "NOTAS DE CADA GRUPO",
          col = c("orange3", "yellow3", "green3", "grey", "yellow3"))
 ```
 
+*Descripción: El gráfico representa el conglomerado de notas agrupadas en los diferentes grupos desde A hasta E, donde se resume que la clase C representa el  promedio mayor de notas y el promedio más bajo pertenece al grupo A; además, el mayor rango intercuartílico lo tiene el grupo C y el menor pertenece al grupo D; sin embargo, el grupo E representa gran cantidad de notas aprobatorias en conjunto y el grupo D representa una nota más simétrica en relación al conjunto de alumnos y sus notas.*
+
+
 **9. Si la variable conc recoge la concentración de plomo (en ppm) en el aire de cierta zona durante un dia completo.**
 
 **a)**  *¿Cuál ha sido la concentración máxima?*
@@ -374,6 +377,8 @@ Por último, se procedera a plotearlo, utilizando la funcion "plot"
 ```{r}
 plot(x2,y2)
 ```
+
+*Descripción: El gráfico representa un plano cartesiano en el que las coordenadas son representadas en función de abscisas y ordenadas (eje x y eje y) y nos muestra una curva ascendente cuadrática con una trayectoria hacia el infinito en el eje de las ordenadas.*
 
 Para borrar el plot actual es de la siguiente manera:
 
@@ -1132,6 +1137,8 @@ plot(x=year[2:39],y=vect,main="CO2 en la atmósfera en el periodo 1960-1997 ",xl
      font=4,bg="blue")
 ```
 
+*Descripción: El gráfico representa la variación anual del CO2 a través de un periódo de tiempo desde el año 1959 hasta el año 1997 donde se establece un promedio mensual de esos años y se le compara con la cantidad de ppm de CO2 muestreadas en cada año, resumidamente por décadas desde 1960 a 1970 presenta los valores más bajos de concentración de CO2, desde los años 1970 a 1980 nos muestra una variación muy distintivas siendo muy irregular pero en relación a la década pasada presenta una mayor alza de concentraciones de CO2 y en la década de 1980 a 1990 existe mayor cantidad de CO2  que en otras décadas pasadas, además de el mayor pico de concentracion de ppm; por último en la  decada de 1990 a más hubo una baja considerable respecto a la anterior y una baja distinguible de concentración de ppm.* 
+
 * **La diferencia de concentración de *CO2* entre 2020 y 2019 fue igual a 2.64. Agregar un punto rojo representando esa diferencia al plot ya creado (usar una forma diferente , como `pch=4`**
 
 ```{r figura2, echo=FALSE}
@@ -1139,6 +1146,8 @@ plot(x=year[2:39],y=vect,main="CO2 en la atmósfera en el periodo 1960-1997 ",xl
      font=4,bg="blue")
 points(2020,2.64,col="blue",pch=4)
 ```
+
+*Descripción: Respecto a la anterior figura muestra un dato del año 2020 donde esta la más alta concentración incluso mas que las décadas pasadas sobre las concentraciones de ppm, siendo este indicador que despues de la última década del anterior gráfico existió una laza o incremento en las cantidades de ppm de CO2 muestreadas. *
 
 **14) Lee el archivo `rainfall.csv` como un `data.frame**
 
@@ -1166,3 +1175,242 @@ library(dplyr)
 ``` {r}
 r_f<-filter(r_ga,precipitacion >180)
 r_f
+```
+
+## Parte 3
+
+### 15. Manipule los dataframe según se solicite.
+
+Se tiene el conjuntos de datos de precipitación diaria (período 1980 - 2013) de ciertas estaciones meteorológicas **(raingaugeDataset.csv)**, donde cada una de estas están asociadas a un código único **(p.e. qc00000208)**, así mismo, se tiene una lista con los nombres, códigos, coordenadas y elevación de cada una de las estaciones **(listRaingauge.csv)**
+
+La estación designada al **Grupo 01** es MALLARES y antes de iniciar con los ejercicios se procederá a:
+
+* Leer los archivos
+* Filtrar, seleccionar y ordenarlos datos de la estación asignada
+* Verificarla cantidad de datos
+
+*Las librerías a utilizar se irán cargando de acuerdo al ejercicio realizado*
+
+
+* **Lectura de archivos** 
+
+``` {r}
+data<-read.csv("https://raw.githubusercontent.com/ryali93/ProgramacionR/master/data/raingaugeDataset.csv")
+data2<-read.csv("https://raw.githubusercontent.com/ryali93/ProgramacionR/master/data/listRaingauge.csv")
+```
+
+Se ha leído los archivos con la función `read.csv` y con el parametro `sep` se ha asignado el tipo de separación.
+
+
+* **Filtrar, seleccionar y ordenarlos datos **
+
+Se utilizará la librería `dplyr` que se encuentra en el paquete `tidyverse`
+
+
+``` {r, message=FALSE }
+library(dplyr)
+```
+
+
+``` {r}
+cod<-data2 %>% dplyr::filter(NOM_EST=="MALLARES") %>% select(CODIGO)
+cod
+```
+
+Con `filter` y `select` se obtuvo el código de la estación ubicada en el archivo data2.
+
+![Imagen](MAPA.jpeg)
+
+*Descripción: Mapa de ubicación de la estación meteorológica de Magallanes en el departamento de Piura, Provincia de Sullana, Distrito de Marcavelica, en donde se obtuvo los datos de precipitación.*
+
+``` {r}
+datos<-data %>% select(date,qc00000208)  %>% 
+  mutate(date = as.Date(x = date,format="%d/%m/%Y")) %>% 
+  rename(pp_Mallares = qc00000208,fecha= date) %>% arrange(fecha) %>% as_tibble(data)
+datos
+```
+
+Se crea un objeto denominado `datos`, con `select` se obtiene los datos de precipitación, se crea una nueva columna
+con `mutate` que contendra los datos de la fecha que han sido transformados a una clase datos con `as.Date` y luego
+se renombra la variable con `rename` para fines prácticos.
+
+Con la función `arrange` ordenamos los datos de la fecha y posteriormente cambiamos la estructura de los datos a un `tibble`.
+
+
+* **Verificar la cantidad de datos **
+
+Para verificar si no falta ninguna fecha se procede a verificar la cantidad de datos con `nrow`.
+
+``` {r }
+nrow(datos)
+```
+Se evalúa con un vector que contiene la misma secuencia de fechas.
+
+``` {r}
+seq(as.Date("1980-01-01"),as.Date("2013-12-31"),by= "day") %>% length()
+
+```
+
+Habiendo seguido está serie de pasos se procederá a trabajar con los datos limpios.
+
+
+De lo descrito anteriormente, se solicita:
+
+**a.** Determine la cantidad de *missing values* de la serie de tiempo a paso diario.
+
+
+``` {r}
+pp_d<- datos %>% dplyr::filter(is.na(pp_Mallares)) %>% nrow()
+pp_d
+```
+
+Se procede a filtrar los datos y con la función `is.na` nos devolverá aquellos datos que no tienen
+valores, por último contamos con `nrow` las filas para determinamos que tenemos 558 valores de NA
+
+
+**b.**  Calcule la serie de tiempo de precipitación **acumulada mensual** (si el # de días con missing values, en un mes, supera el 10%, la precipitación acumulada mensual será considerado como un NA).
+
+Cargamos la librería `stringr` que nos permitira ... 
+
+```{r message= F}
+library(stringr)
+```
+
+
+``` {r }
+pp_acmes<- datos %>% group_by(fecha = str_sub(fecha,1,7)) %>% 
+  mutate(missv_p = sum(is.na(pp_Mallares))*100/n()) %>% 
+  mutate( missv_na= ifelse(missv_p >= 10,NA, pp_Mallares)) %>% 
+  summarise(pp_m=sum(missv_na)) %>% 
+  mutate(fecha = as.Date(sprintf("%1$s-01",fecha)))
+pp_acmes
+```
+
+
+Inicialmente se agrupará los datos de acuerdo al mes, por lo cual usamos la función `str_sub` que permite substraerlos datos de acuerdo al caracter elegido,luego usamos la función de `mutate` esto nos
+permite crear nuevas columnas; la primera columna contendrá el % de valores NA por mes y la segunda columna evaluará de acuerdo a la condicional `ifesle`, dando como resultado solo la pp `<=10`.
+
+La función `summarise` nos permite sumar los valores de precipitación por mes.
+
+Por consiguiente, se procederá a plotearlo:
+
+```{r}
+library(ggplot2)
+library(ggthemes)
+ggplot(pp_acmes, aes(fecha, pp_m)) + 
+  geom_line(color = "red")+
+  labs(y="Precipitación (mm)", x = "Años")+
+  ggtitle("Precipitación acumulada mensual")+
+  theme_wsj(base_size = 10)
+
+```
+
+*Descripción: El gráfico representa la variación de precipitación mensual a través de un periódo de tiempo en el cuál el valor acumulado mensual se representaba, siendo algunos datos tomados en momentos donde se dió el Fenómeno del Niño donde se registró altos valores de precipitación entre los meses de fin de año, a la vez también se registré meses secos con ausencia de precipitacion en los periódos de sequía, siendo la última década donde se registro periódos moderados y en la década anterior a este siglo donde se concentró el pico mas alto, * 
+
+**c)** Determine la cantidad de missing values de la serie de tiempo a paso mensual.
+
+
+``` {r}
+pp_mes<- pp_acmes %>% dplyr::filter(is.na(pp_m)) %>% nrow() 
+pp_mes
+```
+
+**d)** Cree una función que calcule, a partir de los datos de precipitación mensual, la climatología (Ene-Dic) para el período 1980-2010.
+
+```{r}
+
+Climatologia <-function(Amin,Amax){
+  dplyr::filter(pp_acmes,str_sub(fecha,1,4) >= Amin & str_sub(fecha,1,4) <=Amax)  %>%
+  mutate(mes = str_sub(fecha,6,7)) %>% 
+  group_by(mes) %>% 
+  summarize(pp_m = mean(pp_m,na.rm = T)) %>% 
+  mutate(mes = month.abb) %>% 
+  mutate(mes = factor(mes,levels=month.abb))
+}
+
+```
+
+```{r}
+Climatologia(1980,2010)
+```
+
+Por consiguiente, se procede a plotearlo:
+
+```{r}
+
+ggplot(Climatologia(1980,2010), aes(mes, pp_m)) + 
+  geom_bar(stat = "identity", fill = "#F5C710")+
+  scale_x_discrete(labels = month.abb)+
+  labs(y="Precipitación (mm)", x = "Meses")+
+  ggtitle("Climatología de Enero a Diciembre para el período 1980-2010")+
+  theme(plot.title = element_text(vjust = 1, hjust = 0.3))+
+  theme(axis.title.y = element_text(vjust = 2))+
+  theme(axis.title.x = element_text(vjust = -1))+
+  theme_hc()
+  
+```
+
+*Descripción: El gráfico representa un histograma en barras en función de la precipitación y el periódo en meses, desde el año 1980 hasta el año 2010 se promedio cada mes para obtener los resultados, los valores de cada mes idéntico de todos los años para representar los periódos en la que se concentró la mayor cantidad de precipitación, los valores son mayores en los primeros meses del año que coincide con los meses de verano donde en la región son las épocas donde más llueve, siendo marzo el mas alto y los meses de invierno teniendo los menores valores.*
+
+
+También se puede calcular la precipitación media anual, el cúal se realiza de la siguiente forma:
+
+```{r}
+PPPromedioAnual <- function(Pmin,Pmax){
+  PPPromedioAnual1<- dplyr::filter(pp_acmes,str_sub(fecha,1,4) >=Pmin & str_sub(fecha,1,4) <=Pmax)  %>% 
+    group_by(fecha = str_sub(fecha,1,4)) %>% 
+    summarize(pp_m = sum(pp_m,na.rm = T))
+  return(PPPromedioAnual1)}
+
+```
+```{r}
+View(PPPromedioAnual(1980,2010))
+```
+
+
+Se procederá a plotear:
+
+```{r}
+ggplot(PPPromedioAnual(1980,2010), aes(fecha, pp_m)) + 
+  geom_bar(stat = "identity", fill = "#F5C710")+
+  labs(y="Precipitación (mm)", x = "Meses")+
+  ggtitle("Precipitación media anual del periodo 1980 - 2010")+
+  theme(plot.title = element_text(vjust = 1, hjust = 0.3))+
+  theme(axis.title.y = element_text(vjust = 2))+
+  theme(axis.text.x = element_text(angle = 90))+
+  theme_hc()
+```
+
+*Descripción: El gráfico representa un histograma en barras en función de la precipitación y el periódo anual,para esto se presento la cantidad de precipitación registradas anuales durante los años de 1980 al 2010 donde se registró la mayor cantidad de precipitación en el año de 1982-1983, en ese tiempo ocurrió uno de los peores Fenómenos del Niño en la historia lloviendo desde Dicimebre de 1982 hasta Junio del año 1983, debido a eso representa una de las mayores cantidades de precipitación registradas seguido del periódo de 1997 a 1998 con un caso similar pero en menor intensidad, siendo los registros más anómals, los demás periodos siendo mas moderados en cuestión a la cantidad de precipitación registradas.*
+
+
+``` {r}
+
+pp_month<- pp_acmes %>% mutate(fecha = as.Date(sprintf("%1$s-01",fecha))) %>% 
+  dplyr::filter(fecha >= as.Date("1980-01-01") & fecha <= as.Date("2010-12-31")) %>% 
+  mutate( mes = str_sub(fecha,6,7))
+
+
+
+```
+
+Para graficar, se utilizo la librería `ggplot2` en la cuál ingresaremos
+los parámetros.
+
+``` {r }
+
+A<-ggplot(dplyr::filter(pp_month, fecha >= "1980-01-01" & fecha <= "2013-12-31"))+
+  geom_boxplot( aes(x=mes,y=pp_m, color = mes))+
+  ggtitle("Valores mensuales (Enero-Diciembre) para el período 1980-2013")+
+  xlab("Meses") + ylab("Precipitación (mm)") +
+  theme_igray()+
+  scale_x_discrete(labels = month.abb,name="Meses")+
+  scale_color_discrete(labels= month.abb,name="Meses")
+
+```
+
+``` {r}
+plot(A)
+```
+
+*Descripción: El gráfico representa un diagrama de caja en el que esta registrado la cantidad de precipitación promedio de todos los meses de los años desde 1980 hasta 2013, la cantidad fue establecida con la agrupación de meses similares de todos los años y promediandolos en función de su precipitación, los datos nos muestran que los periódos de verano son los que más se destacaron con altos valores de precipitación tomando en cuenta factores como el Fenómeno del Niño especialmente mas intensos en el mes de Marzo y en menor intensidad en los meses de invierno desde Junio hasta Setiembre donde el registro muestra poca precipitación coincidiendo con la época de sequía de la región. *
