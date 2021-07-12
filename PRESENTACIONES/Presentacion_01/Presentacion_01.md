@@ -8,7 +8,7 @@ author:
  - name:  "Miguel Jurado, Milagros (código : 17160191)"
  - name:  "Ramos Castillo,Jacqueline Elizabeth (código : 17160195)"
 
-date: "11-07-2021"
+
 logo: rmarkdown.png
 output: html_document
   
