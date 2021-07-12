@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>PRESENTACION_GRUPO1_FINAL.knit</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="PRESENTACION_GRUPO1_FINAL_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="PRESENTACION_GRUPO1_FINAL_files/reveal.js-3.3.0.1/css/theme/simple.css" id="theme">
+
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal .slide-menu-button {
+      left: 105px !important;
+    }
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+    <link rel="stylesheet" href="styles.css"/>
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="PRESENTACION_GRUPO1_FINAL_files/header-attrs-2.8/header-attrs.js"></script>
+    <link href="PRESENTACION_GRUPO1_FINAL_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="PRESENTACION_GRUPO1_FINAL_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section id="presentación-del-ejercicio-3" class="title-slide slide level1">
+<h1>PRESENTACIÓN DEL EJERCICIO 3</h1>
+<p><hl style="color: red"> <br> <strong>INTEGRANTES</strong></p>
+<p><br> <hl style="color: black"> Condor Melo, Deysy <br> Lara Huapaya, José Alberto <br> Ceras Robles, Jose Alexander <br> Miguel Jurado, Milagros <br> Ramos Castillo, Elizabeth</p>
+<p><br> Ingeniería Geográfica - UNMSM</p>
+</section>
+
+<section id="parte-3" class="title-slide slide level1">
+<h1>Parte 3</h1>
+<p><strong>Manipule los dataframe según se solicite</strong></p>
+<p>Se tiene el conjuntos de datos de precipitación diaria (período 1980 - 2013) de ciertas estaciones meteorológicas (<strong>raingaugeDataset.csv</strong>), donde cada una de estas están asociadas a un código único (<strong>p.e. qc00000208</strong>). Asimismo, se tiene una lista con los nombres, códigos, coordenadas y elevación de cada una de las estaciones (<strong>listRaingauge.csv</strong>).</p>
+</section>
+
+<section id="section" class="title-slide slide level1">
+<h1></h1>
+<p>A cada grupo le corresponde la siguiente estación:</p>
+<ul>
+<li><strong>Grupo 01</strong>: MALLARES</li>
+<li><strong>Grupo 02</strong>: TABACONAS</li>
+<li><strong>Grupo 03</strong>: PUERTO PIZARRO</li>
+<li><strong>Grupo 04</strong>: MORROPON</li>
+<li><strong>Grupo 05</strong>: SAN MIGUEL</li>
+<li><strong>Grupo 06</strong>: CHULUCANAS</li>
+<li><strong>Grupo 07</strong>: LAMBAYEQUE</li>
+<li><strong>Grupo 08</strong>: EL LIMON</li>
+<li><strong>Grupo 09</strong>: EL SALTO</li>
+<li><strong>Grupo 10</strong>: CHUSIS</li>
+</ul>
+</section>
+
+<section>
+<section id="section-1" class="title-slide slide level1">
+<h1></h1>
+<p>De lo descrito anteriormente, se solicita:</p>
+<ol type="a">
+<li>Determine la cantidad de <strong>missing values</strong> de la serie de tiempo a paso diario.</li>
+<li>Calcule la serie de tiempo de precipitación <strong>acumulada mensual</strong> (si el # de días con missing values, en un mes, supera el 10%, la precipitación acumulada mensual será considerado como un <strong><code>NA</code></strong>).</li>
+<li>Determine la cantidad de <strong>missing values</strong> de la serie de tiempo a paso mensual.</li>
+<li>Cree una función que calcule, a partir de los datos de preicpitación mensual, la <strong>climatología (Ene-Dic)</strong> para el <strong>período 1980-2010</strong>.</li>
+<li>Poltear (boxplot) la variabilidad de los valores mensuales (Ene-Dic) para el período 1980-2013.</li>
+</ol>
+</section>
+<section id="section-2" class="slide level2">
+<h2></h2>
+<p>La estación designada al <strong>Grupo 01</strong> es MALLARES y antes de iniciar con los ejercicios se procederá a: <br> <br> <br> * Leer los archivos <br> * Filtrar, seleccionar y ordenarlos datos de la estación asignada <br> * Verificarla cantidad de datos <br> <br> <br> <br> <em>Las librerías a utilizar se irán cargando de acuerdo al ejercicio realizado</em></p>
+</section>
+<section id="lectura-de-archivos" class="slide level2">
+<h2>Lectura de archivos</h2>
+<p><br> <br></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/ryali93/ProgramacionR/master/data/raingaugeDataset.csv&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>data2<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/ryali93/ProgramacionR/master/data/listRaingauge.csv&quot;</span>)</span></code></pre></div>
+<p><br> <br> <br></p>
+<p>Se ha leído los archivos con la función <code>read.csv</code>.</p>
+</section>
+<section id="filtrar-seleccionar-y-ordenarlos-datos" class="slide level2">
+<h2>Filtrar, seleccionar y ordenarlos datos</h2>
+<p>Se utilizará la librería <code>dplyr</code> que se encuentra en el paquete <code>tidyverse</code> <br></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cod<span class="ot">&lt;-</span>data2 <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(NOM_EST<span class="sc">==</span><span class="st">&quot;MALLARES&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(CODIGO)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cod</span></code></pre></div>
+<pre><code>##       CODIGO
+## 1 qc00000208</code></pre>
+<p>Con <code>filter</code> y <code>select</code> se obtuvo el código de la estación ubicada en el archivo data2.</p>
+</section>
+<section id="section-3" class="slide level2">
+<h2></h2>
+<p><img data-src="MAPA.jpeg" alt="Imagen" /></p>
+</section>
+<section id="procesamiento" class="slide level2">
+<h2>Procesamiento:</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>datos<span class="ot">&lt;-</span>data <span class="sc">%&gt;%</span> <span class="fu">select</span>(date,qc00000208)  <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(<span class="at">x =</span> date,<span class="at">format=</span><span class="st">&quot;%d/%m/%Y&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">pp_Mallares =</span> qc00000208,<span class="at">fecha=</span> date) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(fecha) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(data)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>datos</span></code></pre></div>
+<pre><code>## # A tibble: 12,419 x 2
+##    fecha      pp_Mallares
+##    &lt;date&gt;           &lt;dbl&gt;
+##  1 1980-01-01           0
+##  2 1980-01-02           0
+##  3 1980-01-03           0
+##  4 1980-01-04           0
+##  5 1980-01-05           0
+##  6 1980-01-06           0
+##  7 1980-01-07           0
+##  8 1980-01-08           0
+##  9 1980-01-09           0
+## 10 1980-01-10           0
+## # ... with 12,409 more rows</code></pre>
+</section>
+<section id="section-4" class="slide level2">
+<h2></h2>
+<p>Se crea un objeto denominado <code>datos</code>, con <code>select</code> se obtiene los datos de precipitación, además se crea una nueva columna con <code>mutate</code> que contendra los datos de la fecha que han sido transformados a una clase datos con <code>as.Date</code> y luego se renombra la variable con <code>rename</code> para fines prácticos.</p>
+<p>Con la función <code>arrange</code> ordenamos los datos de la fecha y posteriormente cambiamos la estructura de los datos a un <code>tibble</code>.</p>
+</section>
+<section id="verificar-la-cantidad-de-datos" class="slide level2">
+<h2>Verificar la cantidad de datos</h2>
+<p>Para verificar si no falta ninguna fecha se procede a verificar la cantidad de datos con <code>nrow</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(datos)</span></code></pre></div>
+<pre><code>## [1] 12419</code></pre>
+<p>Se evalúa con un vector que contiene la misma secuencia de fechas.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="fu">as.Date</span>(<span class="st">&quot;1980-01-01&quot;</span>),<span class="fu">as.Date</span>(<span class="st">&quot;2013-12-31&quot;</span>),<span class="at">by=</span> <span class="st">&quot;day&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">length</span>()</span></code></pre></div>
+<pre><code>## [1] 12419</code></pre>
+</section>
+<section id="section-5" class="slide level2">
+<h2></h2>
+<p>De lo descrito anteriormente, se solicita:</p>
+<p><strong>a.</strong> Determine la cantidad de <em>missing values</em> de la serie de tiempo a paso diario.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pp_d<span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">is.na</span>(pp_Mallares)) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>pp_d</span></code></pre></div>
+<pre><code>## [1] 558</code></pre>
+<p>Se procede a filtrar los datos y con la función <code>is.na</code> nos devolverá aquellos datos que no tienen valores, por último contamos con <code>nrow</code> las filas para determinamos que tenemos 558 valores de NA.</p>
+</section>
+<section id="section-6" class="slide level2">
+<h2></h2>
+<p><strong>b.</strong> Calcule la serie de tiempo de precipitación <strong>acumulada mensual</strong> (si el # de días con missing values, en un mes, supera el 10%, la precipitación acumulada mensual será considerado como un NA). <br> <br> Cargamos la librería <code>stringr</code> que nos permitira utilizar la función str_sub() <br> <br></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span></code></pre></div>
+</section>
+<section id="section-7" class="slide level2">
+<h2></h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pp_acmes<span class="ot">&lt;-</span> datos <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(<span class="at">fecha =</span> <span class="fu">str_sub</span>(fecha,<span class="dv">1</span>,<span class="dv">7</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">missv_p =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(pp_Mallares))<span class="sc">*</span><span class="dv">100</span><span class="sc">/</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">missv_na=</span> <span class="fu">ifelse</span>(missv_p <span class="sc">&gt;=</span> <span class="dv">10</span>,<span class="cn">NA</span>, pp_Mallares)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">pp_m=</span><span class="fu">sum</span>(missv_na)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fecha =</span> <span class="fu">as.Date</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%1$s-01&quot;</span>,fecha)))</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>pp_acmes</span></code></pre></div>
+<pre><code>## # A tibble: 408 x 2
+##    fecha       pp_m
+##    &lt;date&gt;     &lt;dbl&gt;
+##  1 1980-01-01   0  
+##  2 1980-02-01   0.5
+##  3 1980-03-01   4.6
+##  4 1980-04-01  29  
+##  5 1980-05-01   0  
+##  6 1980-06-01   0  
+##  7 1980-07-01   0  
+##  8 1980-08-01   0  
+##  9 1980-09-01   0  
+## 10 1980-10-01   0  
+## # ... with 398 more rows</code></pre>
+</section>
+<section id="section-8" class="slide level2">
+<h2></h2>
+<p>Inicialmente se agrupará los datos de acuerdo al mes, por lo cual usamos la función <code>str_sub</code> que permite substraerlos datos de acuerdo al caracter elegido,luego usamos la función de <code>mutate</code> esto nos permite crear nuevas columnas; la primera columna contendrá el % de valores NA por mes y la segunda columna evaluará de acuerdo a la condicional <code>ifesle</code>, dando como resultado solo la pp <code>&lt;=10</code>.</p>
+<p>La función <code>summarise</code> nos permite sumar los valores de precipitación por mes.</p>
+</section>
+<section id="librerías" class="slide level2">
+<h2>Librerías</h2>
+<p>Para graficar, se utilizo la librería <code>ggplot2</code> en la cuál ingresaremos los parámetros.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggthemes)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
+<p><img data-src="https://experienciajoven.com/wp-content/uploads/2020/11/programacion_gamer_001.gif" alt="Alt Text" /></p>
+</section>
+<section id="section-9" class="slide level2">
+<h2></h2>
+<p>Por consiguiente, se procederá a plotearlo:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggthemes)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>PP<span class="ot">&lt;-</span><span class="fu">ggplot</span>(pp_acmes, <span class="fu">aes</span>(fecha, pp_m)) <span class="sc">+</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>)<span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">&quot;Precipitación (mm)&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Años&quot;</span>)<span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Precipitación acumulada mensual&quot;</span>)<span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_wsj</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span></code></pre></div>
+<p><img data-src="https://media1.tenor.com/images/b53a3ed38b2e43706fd57f6ff33ae1bd/tenor.gif?itemid=5350867.gif" alt="Alt Text" /></p>
+</section>
+<section id="section-10" class="slide level2">
+<h2></h2>
+<p><img src="PRESENTACION_GRUPO1_FINAL_files/figure-revealjs/unnamed-chunk-12-1.png" width="768" /></p>
+</section>
+<section id="section-11" class="slide level2">
+<h2></h2>
+<p><em>c)</em> Determine la cantidad de missing values de la serie de tiempo a paso mensual.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pp_mes<span class="ot">&lt;-</span> pp_acmes <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(pp_m)) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>() </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>pp_mes</span></code></pre></div>
+<pre><code>## [1] 26</code></pre>
+<p><img data-src="https://experienciajoven.com/wp-content/uploads/2020/11/programacion_gamer_003.gif" alt="Alt Text" /></p>
+</section>
+<section id="section-12" class="slide level2">
+<h2></h2>
+<p><strong>d)</strong> Cree una función que calcule, a partir de los datos de precipitación mensual, la climatología (Ene-Dic) para el período 1980-2010.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>Climatologia <span class="ot">&lt;-</span><span class="cf">function</span>(Amin,Amax){</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(pp_acmes,<span class="fu">str_sub</span>(fecha,<span class="dv">1</span>,<span class="dv">4</span>) <span class="sc">&gt;=</span> Amin <span class="sc">&amp;</span> <span class="fu">str_sub</span>(fecha,<span class="dv">1</span>,<span class="dv">4</span>) <span class="sc">&lt;=</span>Amax)  <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mes =</span> <span class="fu">str_sub</span>(fecha,<span class="dv">6</span>,<span class="dv">7</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(mes) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">pp_m =</span> <span class="fu">mean</span>(pp_m,<span class="at">na.rm =</span> T)) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mes =</span> month.abb) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mes =</span> <span class="fu">factor</span>(mes,<span class="at">levels=</span>month.abb))</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</section>
+<section id="section-13" class="slide level2">
+<h2></h2>
+<p>Lo visualizamos:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Climatologia</span>(<span class="dv">1980</span>,<span class="dv">2010</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 12 x 2
+##    mes     pp_m
+##    &lt;fct&gt;  &lt;dbl&gt;
+##  1 Jan   36.0  
+##  2 Feb   56.3  
+##  3 Mar   81.4  
+##  4 Apr   48.8  
+##  5 May   18.8  
+##  6 Jun    0.393
+##  7 Jul    0.235
+##  8 Aug    0.183
+##  9 Sep    0.177
+## 10 Oct    1.23 
+## 11 Nov    1.11 
+## 12 Dec   10.2</code></pre>
+</section>
+<section id="section-14" class="slide level2">
+<h2></h2>
+<p>Por consiguiente, se procede a plotearlo: <br> <br> <br></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>CC<span class="ot">&lt;-</span><span class="fu">ggplot</span>(<span class="fu">Climatologia</span>(<span class="dv">1980</span>,<span class="dv">2010</span>), <span class="fu">aes</span>(mes, pp_m)) <span class="sc">+</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;#F5C710&quot;</span>)<span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> month.abb)<span class="sc">+</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">&quot;Precipitación (mm)&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Meses&quot;</span>)<span class="sc">+</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Climatología de Enero a Diciembre para el período 1980-2010&quot;</span>)<span class="sc">+</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="fl">0.3</span>))<span class="sc">+</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">vjust =</span> <span class="dv">2</span>))<span class="sc">+</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">vjust =</span> <span class="sc">-</span><span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_hc</span>()</span></code></pre></div>
+</section>
+<section id="section-15" class="slide level2">
+<h2></h2>
+<p><img src="PRESENTACION_GRUPO1_FINAL_files/figure-revealjs/unnamed-chunk-17-1.png" width="768" /></p>
+</section>
+<section id="section-16" class="slide level2">
+<h2></h2>
+<p>También se puede calcular la precipitación media anual, el cúal se realiza de la siguiente forma: <br> <br> <br></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>PPPromedioAnual <span class="ot">&lt;-</span> <span class="cf">function</span>(Pmin,Pmax){</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  PPPromedioAnual1<span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(pp_acmes,<span class="fu">str_sub</span>(fecha,<span class="dv">1</span>,<span class="dv">4</span>) <span class="sc">&gt;=</span>Pmin <span class="sc">&amp;</span> <span class="fu">str_sub</span>(fecha,<span class="dv">1</span>,<span class="dv">4</span>) <span class="sc">&lt;=</span>Pmax)  <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="at">fecha =</span> <span class="fu">str_sub</span>(fecha,<span class="dv">1</span>,<span class="dv">4</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">pp_m =</span> <span class="fu">sum</span>(pp_m,<span class="at">na.rm =</span> T))</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(PPPromedioAnual1)}</span></code></pre></div>
+</section>
+<section id="section-17" class="slide level2">
+<h2></h2>
+<p>Lo visualizamos:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">PPPromedioAnual</span>(<span class="dv">1980</span>,<span class="dv">2010</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 31 x 2
+##    fecha   pp_m
+##    &lt;chr&gt;  &lt;dbl&gt;
+##  1 1980    34.1
+##  2 1981    25.9
+##  3 1982    30.4
+##  4 1983  2119. 
+##  5 1984    19.1
+##  6 1985     7.5
+##  7 1986    27.0
+##  8 1987   341. 
+##  9 1988    37.2
+## 10 1989    14.2
+## # ... with 21 more rows</code></pre>
+</section>
+<section id="section-18" class="slide level2">
+<h2></h2>
+<p>Por consiguiente, se procede a plotearlo: <br> <br> <br></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>PPAnual<span class="ot">&lt;-</span><span class="fu">ggplot</span>(<span class="fu">PPPromedioAnual</span>(<span class="dv">1980</span>,<span class="dv">2010</span>), <span class="fu">aes</span>(fecha, pp_m)) <span class="sc">+</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;#F5C710&quot;</span>)<span class="sc">+</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>         <span class="fu">labs</span>(<span class="at">y=</span><span class="st">&quot;Precipitación (mm)&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Meses&quot;</span>)<span class="sc">+</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>         <span class="fu">ggtitle</span>(<span class="st">&quot;Precipitación media anual del periodo 1980 - 2010&quot;</span>)<span class="sc">+</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>         <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">hjust =</span> <span class="fl">0.3</span>))<span class="sc">+</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>         <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">vjust =</span> <span class="dv">2</span>))<span class="sc">+</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>         <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>))<span class="sc">+</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>         <span class="fu">theme_hc</span>()</span></code></pre></div>
+</section>
+<section id="section-19" class="slide level2">
+<h2></h2>
+<p><img src="PRESENTACION_GRUPO1_FINAL_files/figure-revealjs/unnamed-chunk-21-1.png" width="768" /></p>
+</section>
+<section id="section-20" class="slide level2">
+<h2></h2>
+<p><strong>e)</strong> Poltear (boxplot) la variabilidad de los valores mensuales (Ene-Dic) para el período 1980-2013.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>pp_month<span class="ot">&lt;-</span> pp_acmes <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">fecha =</span> <span class="fu">as.Date</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%1$s-01&quot;</span>,fecha))) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(fecha <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">&quot;1980-01-01&quot;</span>) <span class="sc">&amp;</span> fecha <span class="sc">&lt;=</span> <span class="fu">as.Date</span>(<span class="st">&quot;2010-12-31&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">mes =</span> <span class="fu">str_sub</span>(fecha,<span class="dv">6</span>,<span class="dv">7</span>))</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>pp_month</span></code></pre></div>
+<pre><code>## # A tibble: 372 x 3
+##    fecha       pp_m mes  
+##    &lt;date&gt;     &lt;dbl&gt; &lt;chr&gt;
+##  1 1980-01-01   0   01   
+##  2 1980-02-01   0.5 02   
+##  3 1980-03-01   4.6 03   
+##  4 1980-04-01  29   04   
+##  5 1980-05-01   0   05   
+##  6 1980-06-01   0   06   
+##  7 1980-07-01   0   07   
+##  8 1980-08-01   0   08   
+##  9 1980-09-01   0   09   
+## 10 1980-10-01   0   10   
+## # ... with 362 more rows</code></pre>
+</section>
+<section id="ploteo" class="slide level2">
+<h2>PLOTEO</h2>
+<p><br> <br></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>A<span class="ot">&lt;-</span><span class="fu">ggplot</span>(dplyr<span class="sc">::</span><span class="fu">filter</span>(pp_month, fecha <span class="sc">&gt;=</span> <span class="st">&quot;1980-01-01&quot;</span> <span class="sc">&amp;</span> fecha <span class="sc">&lt;=</span> <span class="st">&quot;2013-12-31&quot;</span>))<span class="sc">+</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>( <span class="fu">aes</span>(<span class="at">x=</span>mes,<span class="at">y=</span>pp_m, <span class="at">color =</span> mes))<span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Valores mensuales (Enero-Diciembre) para el período 1980-2013&quot;</span>)<span class="sc">+</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Meses&quot;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;Precipitación (mm)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_igray</span>()<span class="sc">+</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> month.abb,<span class="at">name=</span><span class="st">&quot;Meses&quot;</span>)<span class="sc">+</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="at">labels=</span> month.abb,<span class="at">name=</span><span class="st">&quot;Meses&quot;</span>)</span></code></pre></div>
+</section>
+<section id="section-21" class="slide level2">
+<h2></h2>
+<p><img src="PRESENTACION_GRUPO1_FINAL_files/figure-revealjs/figura3-1.png" width="768" /></p>
+</section>
+<section id="gracias" class="slide level2">
+<h2>GRACIAS</h2>
+<p><img data-src="https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif" alt="Alt Text" /> <img data-src="https://progra545857149.files.wordpress.com/2018/10/b4a0d-fondos2banimados2_zpsdbpvulbd.gif?w=711.gif" alt="Alt Text" /></p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="PRESENTACION_GRUPO1_FINAL_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="PRESENTACION_GRUPO1_FINAL_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Transition style
+        transition: 'convex', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+        menu: {
+   
+          numbers: true,
+    
+    
+    
+    
+    
+    
+ 
+          custom: false,
+          themes: false,
+          transitions: false
+        },
+
+
+
+        chalkboard: {
+          toggleNotesButton: true,
+          theme: 'chalkboard',
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'PRESENTACION_GRUPO1_FINAL_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'PRESENTACION_GRUPO1_FINAL_files/reveal.js-3.3.0.1/plugin/search/search.js', async: true },
+          { src: 'PRESENTACION_GRUPO1_FINAL_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'PRESENTACION_GRUPO1_FINAL_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+          { src: 'PRESENTACION_GRUPO1_FINAL_files/reveal.js-3.3.0.1/plugin/menu/menu.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
