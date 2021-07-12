@@ -282,17 +282,15 @@ suma_pg(1024,2,1)</code></pre>
 <p><strong>a)</strong> <em>Suma las notas de los 10 primeros alumnos del vector</em></p>
 <p>Llamamos a las librerias</p>
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## Warning in (function (kind = NULL, normal.kind = NULL, sample.kind = NULL) :
+## non-uniform &#39;Rounding&#39; sampler used</code></pre>
 <pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --</code></pre>
 <pre><code>## v ggplot2 3.3.3     v purrr   0.3.4
-## v tibble  3.1.2     v dplyr   1.0.7
+## v tibble  3.1.2     v dplyr   1.0.6
 ## v tidyr   1.1.3     v stringr 1.4.0
 ## v readr   1.4.0     v forcats 0.5.1</code></pre>
-<pre><code>## Warning: package &#39;tibble&#39; was built under R version 4.0.5</code></pre>
-<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.0.5</code></pre>
-<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.0.5</code></pre>
-<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.0.5</code></pre>
-<pre><code>## Warning: package &#39;forcats&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## Warning in (function (kind = NULL, normal.kind = NULL, sample.kind = NULL) :
+## non-uniform &#39;Rounding&#39; sampler used</code></pre>
 <pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
@@ -837,7 +835,6 @@ P0</code></pre>
 <p>Primero instalamos el paquete <em>EXPM</em>:</p>
 <pre class="r"><code>#install.packages(&quot;expm&quot;)
 library(expm)</code></pre>
-<pre><code>## Warning: package &#39;expm&#39; was built under R version 4.0.5</code></pre>
 <pre><code>## Loading required package: Matrix</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;Matrix&#39;</code></pre>
@@ -860,7 +857,6 @@ P0 %^% 2</code></pre>
 <p>Primero instalamos el paquete <em>MATRIXCALC</em>:</p>
 <pre class="r"><code>#install.packages(&quot;matrixcalc&quot;)
 library(matrixcalc)</code></pre>
-<pre><code>## Warning: package &#39;matrixcalc&#39; was built under R version 4.0.5</code></pre>
 <p>Luego se realiza la siguiente estructura:</p>
 <pre class="r"><code>#Para calcular la matriz elevada al cuadrado:
 matrix.power(P0,2)</code></pre>
@@ -1344,9 +1340,8 @@ pp_acmes</code></pre>
 <p>La función <code>summarise</code> nos permite sumar los valores de precipitación por mes.</p>
 <p>Por consiguiente, se procederá a plotearlo:</p>
 <pre class="r"><code>library(ggplot2)
-library(ggthemes)</code></pre>
-<pre><code>## Warning: package &#39;ggthemes&#39; was built under R version 4.0.5</code></pre>
-<pre class="r"><code>ggplot(pp_acmes, aes(fecha, pp_m)) + 
+library(ggthemes)
+ggplot(pp_acmes, aes(fecha, pp_m)) + 
   geom_line(color = &quot;red&quot;)+
   labs(y=&quot;Precipitación (mm)&quot;, x = &quot;Años&quot;)+
   ggtitle(&quot;Precipitación acumulada mensual&quot;)+
