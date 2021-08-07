@@ -785,5 +785,5 @@ Grafico2
 
 
 **INTERPRETACIÓN:**
-El gráfico representa un diagrama de caja en el que se encuentra la cantidad de temperatura promedio mensual desde 1980 hasta 2013, los puntos rojos son valores anómalos, podemos observar que en los meses de Diciembre a Marzo las temperaturas tienen un promedio menor a los meses de Abril a Setiembre.
+El gráfico representa un diagrama de caja en el que se encuentra la cantidad de temperatura promedio mensual desde 1980 hasta 2013, siendo los primeros meses los que tienen la más baja temperatura y aumentando con el tiempo en la varianza, el mes de febrero presenta mayor diferencia de temperaturas en relación a los otros meses. Los puntos rojos representan valores atipicos considerados fuera del rango, entre los meses de Mayo hasta octubre represtan las más altas temperaturas a mediados del año, la mediana en la mayoria de meses es irregular y los meses de cambio de estación presenta un mayor volumen en el promedio calculado de todos los años.
 
