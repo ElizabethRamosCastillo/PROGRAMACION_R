@@ -308,6 +308,8 @@ PBIAS <- data.frame(Escenario = Names,PBIAS = c(PBIAS_ACCESS1.0,PBIAS_HadGEM2_ES
 PBIAS
 
 ```
+
+
 **INTERPRETACIÓN**
 
 El sesgo porcentual (PBIAS) mide la tendencia promedio de los valores simulados a ser mayores o menores que sus observados.
@@ -402,6 +404,8 @@ ggplot(datos,aes(x=Meses, y=Precipitacion,color=Escenario))+
   theme_igray()+
   scale_x_continuous(breaks = c(1:12), labels = month.abb)
 ```
+
+
 **INTERPRETACIÓN**
 Como observamos en el gráfico, el mes de marzo presenta la mayor precipitación para el escenario climático ACCESS 1.0, alejándose del valor de los datos observados,mientras que el escenario climático  MPI-ESM-LR presenta un valor de precipitación similar a los datos observados para dicho mes. La mayor similitud de todos los escenarios climáticos con respecto a los datos observados ocurren en los meses de Agosto y Setiembre, siendo meses de poca precipitación.
 
@@ -411,6 +415,8 @@ Como observamos en el gráfico, el mes de marzo presenta la mayor precipitación
 *Se tiene el conjunto de datos de temperatura diaria (periodo 1928 - 2015) de ciertas estaciones meteorológicas (temperatureDataset.csv), donde cada una de estas están asociadas a un código unico (p.e. qc00000208). Si existen valores iguales a -99.9, considerarlos como missing values y convertirlos a NA*
 
 ```{r}
+library(tidyverse)
+
 DatosT <-
   read.csv("https://raw.githubusercontent.com/DeysyCondor/R_2021/master/temperatureDataset.csv") %>% 
   tibble() %>% 
@@ -448,7 +454,7 @@ DatosT1 <-
     DATE >="1983-09-01" & DATE <= "1984-08-31" | 
     DATE >="1997-09-01" & DATE <= "1998-08-31" 
     ) %>% 
-  mutate(missVal = (is.na(Temp))) #En missVal nos aparece que existe 1 solo NA
+  mutate(missVal = sum(is.na(Temp))) #En missVal nos aparece que existe 1 solo NA
 DatosT1
 ```
 
@@ -497,17 +503,24 @@ DatosT2
 Graficándolo:
 
 ```{r}
+library(ggthemes)
+
 Grafico <-ggplot(data = DatosT2, mapping = aes(x = Month, y = Tmonth,color = Month))+
   geom_boxplot() +
   ggtitle("  Serie de tiempo de temperatura mensual (Enero - Diciembre)")+
   xlab("Meses") + ylab("Temperatura (°C)") +
-  theme_igray()+
+  theme (plot.title = element_text(family="Comic Sans MS",size=rel(1.5),hjust = 0.5,
+                                   face="bold", color="red", lineheight=0.5))+
   scale_x_discrete(labels = month.abb,name="Meses")+
   scale_color_discrete(labels= month.abb,name="Meses")
 
 plot(Grafico)
 ```
-#FALTA PONER LA DESCRIPCION DE LOS VALORES ATIPICOS
+
+
+**INTERPRETACIÓN**
+Los valores atípicos son valores en el que estadisticamente se alejan de cierto rango; en el ploteo, los puntos atípicos se encuentran entre los meses de Enero, Julio, Agosto, Octubre y Diciembre, debido a que son los meses de periodo de cambio de estación, por lo que es común ver esos tipos de anomalías de temperatura ciertos días, ya que son periodos en el que se está estableciendo la estación por lo que existe cambio graduales de frío y calor como forma de transición.
+
 
 **3.3** *Determine la cantidad de missing values de la serie de tiempo a paso mensual para los años 2005 y 2010.*
 
@@ -520,7 +533,7 @@ DatosT3 <-
     (DATE >="2005-01-01" & DATE <= "2005-12-01") | 
     (DATE >="2010-01-01" & DATE <= "2010-12-01") 
   ) %>% 
-  mutate(missVal5_10 = is.na(Tmonth)) #Nos aparece que existe 4 solo NA's
+  mutate(missVal5_10 = sum(is.na(Tmonth))) #Nos aparece que existe 4 solo NA's
 
 DatosT3
 ```
@@ -629,7 +642,104 @@ ggplot(data = DF2,aes(x = Month, y = temperatura, fill = Periodo)) +
 
 ```
 
+Segunda forma de solucionarlo:
 
+```{r}
+Climatologia <- function(Amin, Amax, Bmin, Bmax) {
+  dplyr::filter(DatosT2, (DATE >= Amin & DATE <=Amax) |
+                  (DATE >= Bmin & DATE <=Bmax) 
+                ) %>% 
+  mutate(
+    Periodo = ifelse(DATE >= "1980-01-01" & DATE <="1995-12-01", "Periodo1", "Periodo2"),
+  ) %>% 
+  group_by(Periodo, Month) %>% 
+  summarize(Temp_month = mean(Tmonth, na.rm = T)) %>% 
+  mutate(Meses = month.abb) 
+}
+```
+
+Para ambos periodos:
+
+```{r}
+X <- Climatologia("1980-01-01","1995-12-01","1996-01-01" ,"2010-12-01")
+X
+```
+
+Gráfico:
+
+```{r}
+Grafclim <- ggplot(data = X,
+                   mapping = aes(x = Month, y = Temp_month, group=Periodo)) +
+  geom_line(aes(color = Periodo), size = 1) +
+  ggtitle("CLIMATOLOGÍA")+
+  theme (plot.title = element_text(family="Comic Sans MS",size=rel(2),hjust = 0.5,
+                                   face="bold", color="red", lineheight=1.5))+
+  scale_color_manual(values = c("#00AFBB", "#E7B800")) +
+  xlab("Meses") + ylab("Temperatura [°C]")+
+  scale_x_discrete(labels = month.abb,name="Meses")
+Grafclim
+```
+
+Tercera forma de solucionarlo (sin función):
+
+Periodo 1:
+
+```{r}
+Periodo1 <-
+  DatosT2 %>% 
+  dplyr::filter(
+    (DATE >= "1980-01-01" & DATE <= "1995-12-01")
+  ) %>% 
+  group_by(Month) %>% 
+  summarize(Temp_month1 = mean(Tmonth, na.rm = T)) %>% 
+  mutate(
+    Periodo = "Periodo1"
+  )
+
+Periodo1
+```
+
+Periodo2:
+
+```{r}
+Periodo2 <-  
+  DatosT2 %>% 
+  dplyr::filter(
+    (DATE >= "1996-01-01" & DATE <= "2010-12-01")
+  ) %>% 
+  group_by(Month) %>% 
+  summarize(Temp_month2 = mean(Tmonth, na.rm = T)) %>% 
+  mutate(
+    Periodo = "Periodo2"
+  )
+
+Periodo2
+```
+
+Gráfico:
+
+```{r}
+Clim <- 
+  cbind(Periodo1, Periodo2)
+
+
+library(dplyr)
+Clima <- 
+  Clim %>% subset(select = !duplicated(names(.)))
+Mes <-c(1:12) 
+Clima2 <- Clima[, c(2 ,4)]
+matplot(Clima2, type = "o", lty = 2, pch = 19,lwd=3, main = "DIFERENCIAS CLIMATOLOGICAS",col = 3:4,
+        inset = 0.05, col.main="red",
+        ylab = "DATOS DE TEMPERATURA ", xlab = "MESES",
+        ylim = c(min(Clima2), max(Clima2)))
+axis(1, at = seq(round(min(Mes)), round(max(Mes)), by = 1), labels = 1:12)
+legend("bottom", legend = c("(1980-1995)", "(1996-2010)"),lwd=3, 
+       lty = 1, col = 3:4, title = "PERIODOS", title.col = "RED")
+```
+
+
+**INTERPRETACIÓN**
+El gráfico muestra el promedio de todos los meses desde Enero hasta Diciembre en los periodos de 1980-1995 y 1996-2010; el comportamiento de la gráfica es similar en ambos comenzando con bajas temperaturas y aumentando gradualmente. Se ve el cambio en que el periodo de 1996 - 2010 las temperaturas son mas frías que periodo 1980 - 1995 y a lo largo de la comparacion la grafica no se cruzan, lo que quiera decir que esa tendencia de bajas temperaturas se dio a lo largo de todo el año incluso en los meses de verano. 
 
 **3.5** *Plotear (boxplot) la variabilidad de los valores mensuales (Ene-Dic) para el periodo 1980-2013 y describirlo correctamente.*
 
@@ -644,5 +754,36 @@ Graf3<-ggplot(dplyr::filter(DatosT2, DATE >= "1980-01-01" & DATE <= "2013-12-31"
 
 plot(Graf3)
 ```
-*Descripción: El gráfico representa un diagrama de caja en el que se encuentra la cantidad de temperatura promedio mensual desde 1980 hasta 2013...* 
+Otra manera de resolverlo:
+
+Filtramos el periodo 1980 - 2013:
+
+```{r}
+DatosT10 <- 
+  DatosT2 %>% 
+  dplyr::filter(
+    DATE >= "1980-01-01" & DATE <= "2013-12-01"
+  )
+
+DatosT10
+```
+Gráfico:
+
+```{r}
+Grafico2 <-ggplot(data = DatosT10, mapping = aes(x = Month, y = Tmonth, fill=Month)) +
+  stat_boxplot(geom = "errorbar",      
+               width = 0.2) +guides(fill=FALSE) +
+  geom_boxplot(outlier.colour = "red") + ggtitle("Variabilidad")+
+  theme (plot.title = element_text(family="Comic Sans MS",size=rel(2),hjust = 0.5,
+                                   face="bold", color="red", lineheight=1.5))+
+  xlab("Meses") + ylab("Temperatura") +
+  scale_x_discrete(labels = month.abb,name="Meses")+
+  scale_color_discrete(labels= month.abb,name="Meses")
+
+Grafico2
+```
+
+
+**INTERPRETACIÓN:**
+El gráfico representa un diagrama de caja en el que se encuentra la cantidad de temperatura promedio mensual desde 1980 hasta 2013, los puntos rojos son valores anómalos, podemos observar que en los meses de Diciembre a Marzo las temperaturas tienen un promedio menor a los meses de Abril a Setiembre.
 
