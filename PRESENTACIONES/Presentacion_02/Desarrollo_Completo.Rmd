@@ -216,7 +216,14 @@ library(ggthemes)
 Ubicamos nuestra cuenca y seleccionamos las precipitaciones correspondientes con sus respectivos meses y escenarios:
 
 ```{r}
-datos<-data %>% dplyr::filter(uh_name=="Cuenca Tumbes") %>% select(Nombre = uh_name,Meses = bh_month,Precipitacion = bh_pc, Escenario = bh_esc)
+datos<-data %>% dplyr::filter(uh_name=="Cuenca Tumbes") %>% 
+  rename(Cuenca=uh_name,
+         Escenario=bh_esc,
+         Meses=bh_month,
+         Precipitacion=bh_pc,
+         ETR=bh_er,
+         Rendimientoh=bh_rh,
+         Caudal=bh_qd)
 datos
 ```
 
@@ -224,6 +231,20 @@ Se solicita lo siguiente:
 
 
 **2.1** *Calcular la precipitación acumulada anual (Valores observados) para la cuenca asignada.*
+
+
+Hallamos la precipitacion acumulada anual de los datos observados:
+
+```{r}
+PPAcumuladaAnual<- datos %>% select(2:5) %>%
+  filter(Escenario=="Observado") %>% summarize(Precipitación=sum(Precipitacion,na.rm = T)) 
+
+colnames(PPAcumuladaAnual) <- "Precipitación acumulada anual"
+PPAcumuladaAnual 
+```
+
+
+**2.2** *Calcular el porcentaje de sesgo (%, PBIAS) de los escenarios climáticos (ACCESS, HADGEM2, MPI) respecto a los datos observados para cada mes (enero - diciembre) de cada variable, para la cuenca asignada.*
 
 Para obtenerlo se utilizará las precipitaciones del escenerio observado, entonces para un mejor entendimiento, utilizaremos la siguiente función:
 
@@ -233,42 +254,67 @@ Opcional:
 
 Gather: La función gather toma múltiples columnas y las une en pares clave-valor. Te ayuda a estructurar de columna a fila
 
-```{r}
 
-df <-datos %>% 
-  spread(key = Escenario, value = Precipitacion) %>% 
-  mutate(Meses = month.abb) %>% 
-  mutate(Meses = factor(Meses,levels=month.abb))
-df
-
-```
-Luego hallamos la precipitacion acumulada anual de los datos observados:
-
-```{r}
-PPAcumuladaAnual<- df  %>% 
-    summarize(Precipitación = sum(Observado,na.rm = T)) 
-
-colnames(PPAcumuladaAnual) <- "Precipitación acumulada anual"
-PPAcumuladaAnual 
-```
-
-
-**2.2** *Calcular el porcentaje de sesgo (%, PBIAS) de los escenarios climáticos (ACCESS, HADGEM2, MPI) respecto a los datos observados para cada mes (enero - diciembre) de cada variable, para la cuenca asignada.*
-
-a fórmula que se utilizará para calcular el porcentaje de sesgo es el siguiente:
+Y la fórmula que se utilizará para calcular el porcentaje de sesgo es el siguiente:
 
 
 $$PBIAS = \frac{(ESCENARIO - OBSERVADO)}{OBSERVADO}*100$$
 Luego crearemos las columnas que contengan el porcentaje de sesgo (%, PBIAS) de los escenarios climáticos (ACCESS, HADGEM2, MPI) respecto a los datos observados para cada mes (enero - diciembre) de cada variable:
 
+**Precipitación**
+
+
 ```{r}
-SESGO <- df %>% 
+
+Sesgo_p<-datos %>% tibble() %>% select(1:4,Precipitacion) %>% 
+  spread(key = Escenario, value = Precipitacion) %>% 
+  mutate(Meses = month.abb) %>%
   mutate(SesgoACCES1.0 = ((`ACCESS 1.0`- Observado) / Observado)*100,
          SesgoHadGEM2_ES = ((`HadGEM2-ES` - Observado) / Observado)*100,
          SesgoMPI_ESM_LR = ((`MPI-ESM-LR` - Observado) / Observado)*100)
-SESGO
+  
+Sesgo_p
+
 ```
 
+
+**Evapotranspiración Real**
+
+
+```{r}
+Sesgo_etr<-datos %>% tibble() %>% select(1:4,ETR) %>% 
+  spread(key = Escenario, value = ETR) %>% 
+  mutate(Meses = month.abb) %>%
+  mutate(SesgoACCES1.0 = ((`ACCESS 1.0`- Observado) / Observado)*100,
+         SesgoHadGEM2_ES = ((`HadGEM2-ES` - Observado) / Observado)*100,
+         SesgoMPI_ESM_LR = ((`MPI-ESM-LR` - Observado) / Observado)*100)
+  
+Sesgo_etr
+```
+**Rendimiento hídrico**
+```{r}
+Sesgo_rh<-datos %>% tibble() %>% select(1:4,Rendimientoh) %>% 
+  spread(key = Escenario, value = Rendimientoh) %>% 
+  mutate(Meses = month.abb) %>%
+  mutate(SesgoACCES1.0 = ((`ACCESS 1.0`- Observado) / Observado)*100,
+         SesgoHadGEM2_ES = ((`HadGEM2-ES` - Observado) / Observado)*100,
+         SesgoMPI_ESM_LR = ((`MPI-ESM-LR` - Observado) / Observado)*100)
+  
+Sesgo_rh
+```
+
+**Caudal**
+
+```{r}
+Sesgo_caudal<-datos %>% tibble() %>% select(1:4,Caudal) %>% 
+  spread(key = Escenario, value = Caudal) %>% 
+  mutate(Meses = month.abb) %>%
+  mutate(SesgoACCES1.0 = ((`ACCESS 1.0`- Observado) / Observado)*100,
+         SesgoHadGEM2_ES = ((`HadGEM2-ES` - Observado) / Observado)*100,
+         SesgoMPI_ESM_LR = ((`MPI-ESM-LR` - Observado) / Observado)*100)
+  
+Sesgo_caudal
+```
 **2.3** *De la pregunta anterior, Cuál es el escenario climático más preciso? Fundamente su respuesta.*
 
 **PRIMER MÉTODO**
@@ -276,7 +322,7 @@ SESGO
 Promediando los valores absolutos de los porcentajes de los sesgos calculados:
 
 ```{r}
-Promedio_Sesgo <- SESGO %>% 
+Promedio_Sesgo <-Sesgo_p %>% 
   summarise(ACCES1.0 = mean(abs(SesgoACCES1.0)),
             HadGEM2_ES = mean(abs(SesgoHadGEM2_ES)),
             MPI_ESM_LR = mean(abs(SesgoMPI_ESM_LR)))
@@ -284,7 +330,6 @@ Promedio_Sesgo <- SESGO %>%
 Promedio_Sesgo
 
 ```
-
 **INTERPRETACIÓN**
 
 Como observamos en los resultados, el que presenta menor porcentaje promedio de sesgo (en valores absolutos) es el escenario climático "MPI-ESM-LR", siendo el más preciso, ya que con valores de baja magnitud indican una simulación precisa del modelo.
