@@ -6,7 +6,7 @@ author:
  - name:  "_Ceras Robles, Jose Alexander (código : 17160034)_"
  - name:  "_Condor Melo,Deysy (código : 17160180)_"
  - name:  "_Lara Huapaya, José Alberto (código : 17160206)_"
- - name:  "_Miguel Jurado, Milagros (código : 17160191)_"
+ - name:  "_Miguel Jurado, Giannina Milagros (código : 17160191)_"
  - name:  "_Ramos Castillo,Jacqueline Elizabeth (código : 17160195)_"
  
 date: "August, 2021"
