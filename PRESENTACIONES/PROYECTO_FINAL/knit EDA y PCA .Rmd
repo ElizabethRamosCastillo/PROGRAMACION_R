@@ -1,0 +1,1746 @@
+---
+title: "ANÁLISIS CLUSTER POR OLAS DE CONTAGIO POR SARS-COV-2 EN EL PERÚ"
+author:
+ - name:  "Condor Melo,Deysy (código : 17160180)"
+ - name:  "Lara Huapaya, José  Alberto (código : 17160206)"
+ - name:  "Ceras Robles, Jose Alexander (código : 17160034)"
+ - name:  "Miguel Jurado, Milagros (código : 17160191)"
+ - name:  "Ramos Castillo,Elizabeth (código : 17160195 )"
+
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+logo: rmarkdown.png
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## COVID-19(SARS-CoV-2):
+
+La COVID-19 es la enfermedad causada por el nuevo coronavirus conocido como SARS-CoV-2,el Peru es uno de los paises mas afcetados por esta enfermadad pòr lo que la necesidad de informacion es necesaria par mantener un estricto monitoreo sobre el desarrolo y avance de esta enfermedad y dar a conocer un reflejo cuantitativo de las consecuencias y variables a lo largo de la pandemia.
+
+### VARIABLES:
+
+Para el presente trabajo se identificó varias variables a través de la descarga de datos en una serie de tiempo donde presenta una relación directa o indirecta con el desarrollo de la primera y segunda ola del SARS-CoV-2, estas varioables han sido puesta a disposicion de la comunidad y de la cual se descargo los datos de fuentes confiables para desarrrollar el proceso de clusterización.
+
+Esta variables son:
+
+* **Elevación Promedio** 
+* **Índice de Desarrollo Humano (IDH)** 
+* **Varones fallecidos por millón de habitantes** 
+* **Mujeres fallecidas por millón de habitantes** 
+* **Varones contagiados por millón de habitantes** 
+* **Mujeres contagiados por millón de habitantes** 
+* **Adultos por millón de habitantes de habitantes** 
+* **Adultos mayores por millón de habitantes** 
+* **Pobreza por millón de habitantess** 
+* **Pobreza extrema por millón de habitantes** 
+* **Camas UCI por cantidad de hospitales** 
+* **Camas UCIN por cantidad de hospitales** 
+* **Ventiladores mecÃ¡nicos por cantidad de hospitales** 
+
+``` {r, message=FALSE }
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(car)
+library(dplyr)
+library(factoextra)
+library(cluster)
+library(simstudy)
+library(data.table)
+library(PerformanceAnalytics)
+library(ggdark)
+library(scatterplot3d)
+library( rgl )
+library(abind)
+library(magic)
+library(igraph)
+library(LICORS)
+library(clValid)
+library(clusterSim)
+library(ggthemes)
+library(ggthemes)
+library(sf)
+```
+
+``` {r}
+dataset1 <- read_csv("https://raw.githubusercontent.com/ElizabethRamosCastillo/PROGRAMACION_R/master/PRESENTACIONES/PROYECTO_FINAL/data/Data_final/Dataset_1_Ola.csv")
+dataset2 <- read_csv("https://raw.githubusercontent.com/ElizabethRamosCastillo/PROGRAMACION_R/master/PRESENTACIONES/PROYECTO_FINAL/data/Data_final/Dataset_2_Ola.csv")
+```
+
+##PRIMERA OLA
+
+### HISTOGRAMAS
+
+1. Histograma de Elevación Promedio:
+
+``` {r}
+hist_EP <- 
+  ggplot(data = dataset1,
+         mapping = aes(x = ElevacionPromedio)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de Elevación Promedio") + 
+  labs(x ="ElevaciÃ³n Promedio") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+
+hist_EP
+```
+
+2. Histograma de Índice de Desarrollo Humano (IDH):
+
+
+``` {r}
+hist_IDH <- 
+  ggplot(data = dataset1,
+         mapping = aes(x = IDH_2019)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de Índice de Desarrollo Humano") + 
+  labs(x ="IDH") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_IDH 
+
+```
+
+#3. Histograma de Varones fallecidos por millón de habitantes:
+
+
+``` {r}
+hist_Var_fall <- 
+  ggplot(data = dataset1,
+         mapping = aes(x = FallMasc_1ola_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de varones fallecidos por millón de habitantes") + 
+  labs(x ="Varones fallecidos por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Var_fall
+
+```
+
+
+#4. Histograma de Mujeres fallecidas por millón de habitantes:
+
+
+``` {r}
+hist_Muj_fall <- 
+  ggplot(data = dataset1,
+         mapping = aes(x = FallFem_1ola_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de mujeres fallecidas por por millón de habitantes") + 
+  labs(x ="Mujeres fallecidos por por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Muj_fall
+
+```
+
+#5. Histograma de Varones contagiados por millón de habitantes:
+
+
+``` {r}
+hist_Var_cont <- 
+  ggplot(data = dataset1,
+         mapping = aes(x = CasosMasc_1ola_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de varones contagiados por millón de habitantes") + 
+  labs(x ="Varones contagiados por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Var_cont 
+
+```
+
+#6. Histograma de mujeres contagiados por millón de habitantes:
+
+
+``` {r}
+hist_Muj_cont <- 
+  ggplot(data = dataset1,
+         mapping = aes(x = CasosFem_1ola_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de mujeres contagiados por millón de habitantes") + 
+  labs(x ="Mujeres contagiados por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Muj_cont
+
+```
+
+#7. Histograma de adultos por millón de habitantes:
+
+
+``` {r}
+hist_Adult <- 
+  ggplot(data = dataset1,
+         mapping = aes(x = Adult_15_64_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de adultos por millón de habitantes") + 
+  labs(x ="Adultos contagiados por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Adult
+
+```
+
+#8. Histograma de adultos mayores por millón de habitantes:
+
+
+``` {r}
+hist_Adult_mayor <- 
+  ggplot(data = dataset1,
+         mapping = aes(x = Mayores_65_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de adultos mayores por millón de habitantes") + 
+  labs(x ="Adultos mayores contagiados por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Adult_mayor 
+
+```
+
+#9. Histograma de pobreza por millón de habitantes:
+
+
+``` {r}
+hist_Pobrez <- 
+  ggplot(data = dataset1,
+         mapping = aes(x = Pobreza_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de pobreza por millón de habitantes") + 
+  labs(x ="Pobreza por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Pobrez
+
+```
+
+#10. Histograma de pobreza extrema por millón de habitantes:
+
+
+``` {r}
+hist_Pob_ext <- 
+  ggplot(data = dataset1,
+  mapping = aes(x = PobrezaExt_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de pobreza extrema por millón de habitantes") + 
+  labs(x ="Pobreza extrema por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Pob_ext
+
+```
+
+#11. Histograma de camas UCI por cantidad de hospitales:
+
+
+``` {r}
+hist_UCI <- 
+  ggplot(data = dataset1,
+         mapping = aes(x = UCI_1ola_cant_hosp)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de camas UCI por cantidad de hospitales") + 
+  labs(x ="Camas UCI por hospitales") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_UCI
+
+```
+
+#12. Histograma de camas UCIN por cantidad de hospitales:
+
+
+``` {r}
+hist_UCIN <- 
+  ggplot(data = dataset1,
+         mapping = aes(x = UCIN_1ola_cant_hosp)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de camas UCIN por cantidad de hospitales") + 
+  labs(x ="Camas UCIN por hospitales") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_UCIN 
+
+```
+
+#13. Histograma de ventiladores mecánicos por cantidad de hospitales:
+
+
+``` {r}
+hist_VM <- 
+  ggplot(data = dataset1,
+         mapping = aes(x = VENT_1ola_cant_hosp)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de ventiladores mecánicos por cantidad de hospitales") + 
+  labs(x ="Ventiladores Mecánicos por hospitales") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_VM
+
+```
+
+## SEGUNDA OLA
+
+### HISTOGRAMAS
+
+``` {r, message=FALSE }
+library(tidyverse)
+library(ggdark)
+library(scatterplot3d)
+library( rgl )
+library(abind)
+library(magic)
+```
+
+
+1. Histograma de Elevación Promedio:
+
+
+``` {r}
+hist_EP <- 
+  ggplot(data = dataset2,
+         mapping = aes(x = ElevacionPromedio)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de Elevación promedio") + 
+  labs(x ="Elevación Promedio") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_EP
+
+```
+
+#2. Histograma de Índice de Desarrollo Humano (IDH):
+
+
+``` {r}
+hist_IDH <- 
+  ggplot(data = dataset2,
+         mapping = aes(x = IDH_2019)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de Índice de Desarrollo Humano") + 
+  labs(x ="IDH") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_IDH
+```
+
+#3. Histograma de Varones fallecidos por millón de habitantes:
+
+
+``` {r}
+hist_Var_fall <- 
+  ggplot(data = dataset2,
+         mapping = aes(x = FallMasc_2ola_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de varones fallecidos por millón de habitantes") + 
+  labs(x ="Varones fallecidos por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Var_fall
+```
+
+#4. Histograma de Mujeres fallecidas por millón de habitantes:
+
+
+``` {r}
+hist_Muj_fall <- 
+  ggplot(data = dataset2,
+         mapping = aes(x = FallFem_2ola_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de mujeres fallecidas por millón de habitantes") + 
+  labs(x ="Mujeres fallecidos por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Muj_fall
+```
+
+#5. Histograma de Varones contagiados por millón de habitantes:
+
+
+``` {r}
+hist_Var_cont <- 
+  ggplot(data = dataset2,
+         mapping = aes(x = CasosMasc_2ola_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de varones contagiados por millón de habitantes") + 
+  labs(x ="Varones contagiados por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Var_cont
+```
+
+#6. Histograma de mujeres contagiados por millón de habitantes:
+
+
+``` {r}
+hist_Muj_cont <- 
+  ggplot(data = dataset2,
+         mapping = aes(x = CasosFem_2ola_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de mujeres contagiados por millón de habitantes") + 
+  labs(x ="Mujeres contagiados por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Muj_cont
+```
+
+#7. Histograma de adultos por millón de habitantes:
+
+
+``` {r}
+hist_Adult <- 
+  ggplot(data = dataset2,
+         mapping = aes(x = Adult_15_64_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de adultos por millón de habitantes") + 
+  labs(x ="Adultos contagiados por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Adult
+```
+
+#8. Histograma de adultos mayores por millón de habitantes:
+
+
+``` {r}
+hist_Adult_mayor <- 
+  ggplot(data = dataset2,
+         mapping = aes(x = Mayores_65_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de adultos mayores por millón de habitantes") + 
+  labs(x ="Adultos mayores contagiados por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Adult_mayor
+```
+
+#9. Histograma de pobreza por millón de habitantes:
+
+
+``` {r}
+hist_Pobrez <- 
+  ggplot(data = dataset2,
+         mapping = aes(x = Pobreza_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de pobreza por millón de habitantes") + 
+  labs(x ="Pobreza por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Pobrez
+```
+
+#10. Histograma de pobreza extrema por millón de habitantess:
+
+
+``` {r}
+hist_Pob_ext <- 
+  ggplot(data = dataset2,
+         mapping = aes(x = PobrezaExt_mill_hab)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de pobreza extrema por millón de habitantes") + 
+  labs(x ="Pobreza extrema por millón de habitantes") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_Pob_ext
+```
+
+#11. Histograma de camas UCI por cantidad de hospitales:
+
+``` {r}
+hist_UCI <- 
+  ggplot(data = dataset2,
+         mapping = aes(x = UCI_2ola_cant_hosp)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de camas UCI por cantidad de hospitales") + 
+  labs(x ="Camas UCI por hospitales") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_UCI 
+```
+
+#12. Histograma de camas UCIN por cantidad de hospitales:
+
+
+``` {r}
+hist_UCIN <- 
+  ggplot(data = dataset2,
+         mapping = aes(x = UCIN_2ola_cant_hosp)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de camas UCIN por cantidad de hospitales") + 
+  labs(x ="Camas UCIN por hospitales") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_UCIN
+```
+
+#13. Histograma de ventiladores mecánicos por cantidad de hospitales:
+
+
+``` {r}
+hist_VM <- 
+  ggplot(data = dataset2,
+         mapping = aes(x = VENT_2ola_cant_hosp)) +
+  geom_histogram(bins = 9, color="black", fill = "orange" ) +
+  dark_theme_gray()+
+  ggtitle("Histograma de ventiladores mecánicos por cantidad de hospitales") + 
+  labs(x ="Ventiladores Mecánicos por hospitales") +
+  theme(
+    plot.title = 
+      element_text(vjust = 1, 
+                   hjust = 0.5,
+                   size=rel(1.7),
+                   face="bold",
+                   color = "red")) +
+  theme(axis.title.x = element_text(face="bold", vjust=-0.5, colour="white", size=rel(1.5))) +
+  theme(axis.title.y = element_text(face="bold", vjust=1.5, colour="white", size=rel(1.5)))
+hist_VM
+```
+
+
+## DESARROLLO:
+### Removemos:
+
+``` {r}
+rm(list = ls())
+```
+
+
+Cargamos las librerias con pacman, esto no te notifica los warnings, library si te sale.
+
+pacman::p_load(tidyverse)
+View(Dataset_1_Ola)
+
+Cargamos la data:
+
+* **Lectura de archivos** 
+
+``` {r}
+Data_1_Ola <- read.csv("https://raw.githubusercontent.com/ElizabethRamosCastillo/PROGRAMACION_R/master/PRESENTACIONES/PROYECTO_FINAL/data/Data_final/Dataset_1_Ola.csv")
+```
+
+``` {r}
+rownames(Data_1_Ola) = Data_1_Ola$PROVINCIA
+
+View(Data_1_Ola)
+```
+
+
+## ANÁLISIS EXPLORATORIO DE DATOS  (EDA)
+
+VAMOS A IR GENERANDO PRIMERO GRAFICOS UNIVARIADOS:
+
+### ELEVACION
+
+``` {r, message=FALSE }
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(car)
+library(dplyr)
+library(factoextra)
+library(cluster)
+library(simstudy)
+library(data.table)
+library(PerformanceAnalytics)
+```
+
+
+``` {r}
+plot(
+  Data_1_Ola$ElevacionPromedio, 
+  pch = 20
+)
+
+text( #Para colocar el texto.
+  Data_1_Ola$ElevacionPromedio,
+  labels = Data_1_Ola$PROVINCIA,
+  cex = 0.5, col = "blue", pos = 1
+)
+```
+
+
+## CASOS DE COVID EN VARONES 
+
+
+``` {r}
+plot(
+  Data_1_Ola$FallMasc_1ola_mill_hab, 
+  pch = 20
+)
+
+text( #Para colocar el texto.
+  Data_1_Ola$FallMasc_1ola_mill_hab,
+  labels = Data_1_Ola$PROVINCIA,
+  cex = 0.5, col = "blue", pos = 1
+)
+```
+
+## GRÁFICOS BIVARIADOS:
+
+### ELEVACIÓN - FALLECIDOS MASCULINOS
+
+
+``` {r}
+plot(
+  Data_1_Ola$ElevacionPromedio, 
+  Data_1_Ola$FallMasc_1ola_mill_hab,
+  pch = 20, col = "red"
+)
+
+text( #Para colocar el texto.
+  Data_1_Ola$ElevacionPromedio, 
+  Data_1_Ola$FallMasc_1ola_mill_hab,
+  labels = Data_1_Ola$PROVINCIA,
+  cex = 0.5, col = "blue", pos = 1
+)
+```
+
+
+## GRÁFICO TRIDIMENSIONAL:
+Se utilizará la librería `scatterplot3d` 
+
+
+``` {r, message=FALSE }
+library(scatterplot3d)
+```
+
+
+``` {r}
+s3d<- scatterplot3d(
+  Data_1_Ola$ElevacionPromedio, 
+  Data_1_Ola$FallMasc_1ola_mill_hab,
+  Data_1_Ola$FallFem_1ola_mill_hab,
+  angle = 40, 
+  color = "blue",
+  pch = 20
+)
+
+text(
+  s3d$xyz.convert(
+    Data_1_Ola$ElevacionPromedio, 
+    Data_1_Ola$FallMasc_1ola_mill_hab,
+    Data_1_Ola$FallFem_1ola_mill_hab
+  ),
+  labels = Data_1_Ola$PROVINCIA,
+  cex = 0.5,
+  pos = 4
+)
+```
+
+## ESTANDARIZACIÓN DE LOS DATOS:
+
+
+NOSOTROS TENEMOS QUE ESTARANDIZAR NUESTROS DATOS, ES UNA PARTE PREVIO A LOS PCA, PORQUE TENEMOS VARIAS VARIABLES.
+
+UNA VARIABLE ESTANDARIZADA TIENE LA PROPIEDAD DE QUE LA DIAGONAL ES 1, SE HACE CON LA FUNCION SCALE PARA ESTANDARIZAR
+
+``` {r}
+Data_1_Ola_PCA <- Data_1_Ola %>% 
+  dplyr::select(-PROVINCIA)
+```
+  
+###  Estandarizamos los datos: (Normalización)
+
+``` {r}
+scale_data_1ola <- scale(Data_1_Ola_PCA) #Te estandariza los datos
+View(scale_data_1ola)
+```
+
+
+### Calculando la matriz varianza covarianza
+
+``` {r}
+cov_1ola<-cov(scale_data_1ola) #La diagonal representa a la varianza de cada variable y los demas valores representan a las covarianza.
+View(cov_1ola)
+```
+
+La suma de los elementos de la diagonal es 7 (que es la varianza explicada global de los datos), osea la suma de autovalores sera igual a 7
+La media de todas las varianzas seran 1.
+
+``` {r}
+diag(cov_1ola) %>% sum()
+```
+
+La suma de las varianzas son conocido como la TRAZA DE LA MATRIZ, ENTONCES LA SUMA DE LA VARIANZAS SERA IGUAL AL NUMERO DE VARIABLES.
+
+
+la función describe te saca los estadásticos de las variables:
+
+``` {r, message=FALSE }
+library(psych)
+```
+
+describe(Data_1_Ola_PCA)
+
+
+## JUSTIFICACION CON UNA MATRIZ DE CORRELACIONES
+
+``` {r, message=FALSE }
+library(PerformanceAnalytics)#para sacar la correlacion
+library(GGally)
+library(lattice)
+library(cluster)
+library(ggplot2)
+library(corrr)
+library(cptcity)#para colores
+```
+
+
+Primero calculamos la matriz de correlacion de los "datos estandarizados"
+
+``` {r}
+mtx_1ola <- cor(scale_data_1ola)#introducimos el dataset estandarizado
+
+```
+
+
+* **UNA FORMA DE GRAFICAR CON PERFORMANCE ANALYTICS** 
+
+``` {r}
+chart.Correlation(scale_data_1ola, histogram = T, pch = 20)
+```
+
+Los asteristicos significan el nivel de significacion.
+
+
+* **OTRA FORMA DE GRAFICA CON GGLLALY** 
+
+``` {r}
+ggpairs(as.data.frame(scale_data_1ola))#solo te aceptan data.frame, no matrices 
+```
+
+* **PARA PLOTEAR LA MATRIZ DE CORRELACION** 
+
+``` {r, message=FALSE }
+library(corrplot)
+```
+
+
+``` {r}
+corrplot(mtx_1ola, method ="shade", sade.col=NA, tl.col ="black", tl.srt =35,
+          addCoef.col = "black", addcolorlabel ="no", order ="AOE",tl.cex = 0.5)
+
+```
+
+
+### ANALISIS DE COMPONENTES PRINCIPALES:
+
+Cargar el paquete ade4 para realizar el analisis de componentes principales
+
+``` {r, message=FALSE }
+library(ade4)
+```
+
+El scale te dice si quieres estandaraizar los datos, en este caso sera false porque ya lo estanfarizamos
+El scanmf te explica que si deseas plotear en grafico de SEDIMENTACION.
+nf es el numero de componentes o ejes retenido, esto es igual a la cantidad de variables como maximo, pero se puede retener menos
+
+``` {r}
+PCA_1ola <-dudi.pca(scale_data_1ola , #la funcion que hace PCA es dudi.pca
+               scale = F, scannf = F, 
+               nf = ncol(scale_data_1ola))
+summary(PCA_1ola)
+```
+
+EIGENVALUES: Nos devuelve los autovalores de los componentes (es como un head que te muestra 5 primeros)
+
+PROJECT INTERTIA: Luego te presenta la varianza explicada
+CUMULATIVE PROJECTED INTERTIA: Luego te presenta la varianza explicada acumulada.
+
+
+
+## PRIMER CRITERIO: AUTOVALORES
+
+PARA OBTENER LOS VALORES PROPIOS (AUTOVALORES)
+``` {r}
+PCA_1ola$eig
+
+```
+
+
+``` {r}
+sum(PCA_1ola$eig) #CUANDO SE SUMA LOS AUTOVALORES TE DA EL NUMERO DE VARIABLES QUE ES 13, PERO COMO NADA ES PRECISO, TE DA UNA APROXIMACIÓN
+
+```
+
+CON ESTOS AUTOVALORES PUEDES DETERMINAR EL PRIMER CRITERIO PARA OBTENER LOS VALORES VECTORES O AUTOVECTORES
+
+``` {r}
+PCA_1ola$c1 #los vectores propios representan los laudings, es decir los "W",  o tambien llamado los pesos,estos varian por variable y por componentes
+
+```
+
+
+### EXPLICACIÓN DE RETENCION LAS VARIABLES:
+
+EL PRIMER CRITERIO PARA SABER CUANTAS COMPONENTES VAMOS A RETENER SE BASA EN LOS AUTOVALORES:
+DICE QUE VAMOS A RETENER TANTOS COMPONENTES  CONFORME ESTOS TENGAN ASOCIADOS AUTOVALORES MAYORES A 1
+PORQUE ESTE CRITERIO ES CONOCIDO COMO LA MEDIA ARIMETICA, CONFORMEN LOS AUTOVALORES SEAN MAYORES AL PROMEDIO DE LA VARIANZA PROMEDIO QUE ERA 1,
+YA QUE NOSOTROS ESTANDARIZAMOS LAS VARIABLES, Y ESTO HACIA QUE LAS DIAGONALES ERAN 1, Y SU PROMEDIO SERA 1, PERO SI NO FUERON ESTANDARIZADAS, CALCULAS
+LA MEDIA ARIMETICA Y VALORES MAYORES A LA MEDIA ARIMETICA SERAN LOS QUE RETENGAMOS.
+ENTONCES NOS QUEDAMOS CON LAS 4 PRIMERAS COMPONENTES
+
+
+## TERCER CRITERIO: RETENCIÃN DE VARIABLES
+
+
+
+### TERCER CRITERIO: CRITERIO DE RETENCION DE VARIABLES:
+SE PUEDEN ELIMINAR VARIABLES, PERO COMO SE ELIMINA, EN FUNCION A LA MATRIZ DE CORRELACION ENTRE LAS VARIABLES ORIGINALES Y LAS COMPONENTES DE LA MATRIZ.
+
+### PLOTEANDO LA MATRIZ COMPONENTES VS VARIABLES ORIGINALES
+
+``` {r}
+PCA_1ola$co 
+
+```
+
+``` {r}
+PCA_PLOT_1ola<-PCA_1ola$co
+
+corrplot(as.matrix(PCA_PLOT_1ola),method ="shade",addCoef.col = "black", addcolorlabel ="no",tl.cex = 0.9)
+
+```
+
+Donde:
+
+cw: los pesos de la columna
+lw: los pesos de la fila
+eig: los valores propios
+rank: el rango de la matriz analizada
+nf: el nÃºmero de factores guardados
+c1: las puntuaciones normalizadas de la columna, es decir, los ejes principales
+l1:las puntuaciones normativas de la fila
+co:las coordenadas de la columna
+li: las coordenadas de la fila, es decir, los componentes principales
+call: la funciÃ³n de llamada
+cent: el vector p que contiene las medias de las variables (tenga en cuenta que si centro = F, el vector contiene p 0)
+norm: el vector p que contiene las desviaciones estÃ¡ndar de las variables, es decir, la raÃ­z de la suma de los cuadrados, las desviaciones de los valores de sus medias divididas por n (tenga en cuenta que si norma = F, el vector contiene p 1)
+
+
+ENTONCES DE ESTE ANALISIS VISUALIZAMOS SI ALGUNAS DE LAS VARIABLES NO SE RELACIONAN CON ALGUNA COMPONENTE, EN ESTE CASO VEMOS QUE SI SE RELACIONAN TODOS, DONDE X1,X2,...X7 SON LAS VARIABLES ORIGINALES Y COMP1, COMP2, ETC SON LOS COMPONENTES PRINCIPALES.
+
+SI VEMOS QUE UNA VARIABLE NO SE CORRELACIONA POR COMPLETO, LE QUITAMOS ESA VARIABLE DE LA MATRIZ ORIGINAL Y VOLVEMOS 
+A CORRER DENUEVO TODO EL ANALISIS PCA.
+CONCLUSION: CON ESTA MATRIZ VEMOS QUE LAS CORRELACIONES SON MAYORES DE +/-0.5 EN LA PRIMERA Y SEGUNDA COMPONENTE,
+POR LO QUE SE RETENDRA LAS 2 PRIMERAS COMPONENTES.
+
+### CONTRIBUCION DE VARIABLES A LAS COMPONENTES PRINCIPALES
+
+``` {r}
+contrib_1ola <- as.matrix(PCA_1ola$co * PCA_1ola$co)
+
+```
+
+Si elevamos al cuadrado las correlaciones, tendremos una mejor representacion, un valor alto representa una contribucion alta, 
+Y un resultado bajo representa una contribucion baja
+
+``` {r}
+corrplot(contrib_1ola, is.corr = F,method ="shade",addCoef.col = "black", addcolorlabel ="no",tl.cex = 0.9)
+
+```
+
+is.corr es para que no correlacione desde -1 a +1, sino de 0 a 1, dado que los resultados estan elevados al cuadrado (valores positivos)
+
+#PODEMOS CONCLUIR QUE LAS VARIABLES DE PERSONAS MAYORES A 65 AÑOS Y ELEVACIÓN CONTRIBUYEN MEJOR A LA SEGUNDA COMPONENTE
+LAS DEMÁS VARIABLES CONTRIBUYEN MEJOR EN LA PRIEMRA COMPONENTE
+#SEGUN ESTE GRAFICO, SOLO RETENDRIAMOS LAS 2 PRIMERAS COMPONENTES, DADO QUE LA COMPONENTE 1 Y 2 EXPLICAN MEJOR CADA UNA DE LAS 13 VARIABLES QUE LAS DEMÁS COMPONENTES.
+
+### OBTENCIÓN DE LOS SCORES O PUNTUACIONES:
+
+LA SALIDA DEL PCA TIENE QUE HACER LO MISMO, UNA TABLA DE 196x13
+
+``` {r}
+as.tibble(scale_data_1ola)
+
+```
+
+ENTONCES VAMOS A TENER LA NUEVA TABLA DE PUNTUACIONES O SCORES
+
+``` {r}
+PCA_PRIMERA_OLA <- PCA_1ola$li #estoy valores ya son los valores resultantes del PCA, el cual se les conocen como SCORES o Puntuaciones
+head(PCA_PRIMERA_OLA)
+head(PCA_1ola$li)
+dim(PCA_1ola$li)
+
+```
+
+ENTONCES COMO DEFINIMOS QUE NOS QUEDAMOS LAS 2 PRIMERAS COMPONENTES, SELECCIONAMOS SOLO DICHAS COMPONENTES.
+
+``` {r}
+output_scores_1ola <-
+  as.tibble(PCA_1ola$li) %>% 
+  dplyr::select(sprintf("Axis%1$s",1:2))
+
+View(output_scores_1ola)
+
+```
+
+### CALCULAR UN INDICE A PARTIR DE COMPONENTES PRINCIPALES:
+
+``` {r}
+I = ((PCA_1ola$li$Axis1*PCA_1ola$eig[1])+(PCA_1ola$li$Axis2*PCA_1ola$eig[2]))/(PCA_1ola$eig[1]+PCA_1ola$eig[2])
+
+Indice_scores_1ola <-dplyr:: bind_cols(output_scores_1ola, Indice = I) %>% 
+  cbind(Data_1_Ola["PROVINCIA"])
+
+View(Indice_scores_1ola)
+
+```
+
+ 
+* **pca$li$Axis1: Representa los scores o puntuaciones de la primer componente**
+* **pca$eig[1]: son los autovalores de la primera componente**
+
+EL CALCULO DEL INDICE SIRVE PARA EL MONITOREO, POR EJEMPLO PODEMOS MONITOREAR LA OCURRENCIA DE UN FENÓMENO A PARTIR DE UN SOLO INDICADOR
+#ESTE INDICE SE PUEDE ESTANDARIZAR CON 0 Y 1, DONDE 0 TE INDICA VALORES BAJO DE PROBABILIDAD DE INCENDIOS POR EJEMPLO Y 1 REPRESENTA VALORES ALTOS
+#DE INCENDIOS
+
+# ANÁLISIS CLUSTER:
+
+## ANÁLISIS CLUSTER AGLOMERATIVO:
+
+*CÁLCULO DE LAS DISTANCIAS:*
+Para realizar un análisis cluster aglomerativo, se debe primero determinar las distancias en función al método, en este caso estamos utilizando las distancias euclidianas
+
+```{r}
+distancia_1ola <- dist(output_scores_1ola, method = "euclidean") #Colocamos los scores del PCA resultante
+
+```
+
+Para calcular la dimension de la matriz de distancia es de la siguiente manera:
+```{r}
+as.matrix(distancia_1ola) %>% dim()
+```
+
+*OBTENIENDO EL DENDOGRAMA:*
+
+Para calcular el dendograma se aplicará la función "hclust", en donde se aplicará le método de agrupamiento "ward.D2", dado que las observaciones de las variables se encuentran muy juntos:
+
+```{r}
+hmodel_1ola <- hclust(distancia_1ola, method ="ward.D2")
+```
+
+*PLOTEANDO EL DENDOGRAMA:*
+El ploteo del dendograma se realizará con R base:
+
+```{r}
+par("bg") 
+par(bg = "black") #Color del fondo
+plot(hmodel_1ola,
+     main="Dendograma",# Título
+     las = 1,                 # Rotar las etiquetas de los ejes de manera horizontal
+     xlab = "Cluster",          # Etiqueta del eje x
+     ylab = "Alturas",          # Etiqueta del eje y
+     cex.main = 1.5,          # Tamaño del título
+     cex.sub = 1.2,           # Tamaño del subtítulo
+     cex.lab = 1.2,           # Tamaño de las etiquetas de los ejes X e Y
+     cex.axis = 1,            # Tamaño de las etiquetas de los ticks de los ejes
+     font.sub = 1,            # Estilo de fuente del título sin formato
+     font.main  = 2,          # Estilo de fuente del subtítulo en negrita
+     font.axis = 3,           # Estilo de fuente de los ejes X e Y en cursiva
+     font.lab  = 4,           # Estilo de fuente de los ticks de los ejes en negrita y cursiva
+     pch  = 21,               # Estilo del símbolo de los puntos del grafico
+     bg = "red",              # Color de fondo del simbolo
+     col = "white",           # Color del borde del simbolo
+     cex = 1.2,               # Tamaño del símbolo
+     lwd = 1.2,               # Ancho del borde
+     col.main = "Yellow",      # Color del título
+     col.sub = "blue",        # Color del subtítulo
+     col.lab = "orange",      # Color de las etiqetas de los ejes
+     col.axis = "maroon4",    # Color de las etiquetas de los ticks
+     fg = "green") 
+```
+
+El eje de las alturas es un valor creciente, es decir aumenta en función a cómo se va construyendo los cluster, debido a que la cohesion disminuye cada vez que aglomeramos los cluster o exigimos que se unan.
+
+*PROCESO DE AGRUPAMIENTO INDICANDO DISTANCIAS:*
+
+Para obtener las alturas aplicaremos el siguiente código:
+
+```{r}
+head(hmodel_1ola$height)
+```
+
+Ploteando el gráfico de las alturas:
+
+```{r}
+plot.new()
+
+rect(par("usr")[1], par("usr")[3],
+     par("usr")[2], par("usr")[4],
+     col = "black") 
+
+par(new = TRUE)
+
+plot(hmodel_1ola$height,
+     main="Gráfico de alturas",# Título
+     las = 1,                 # Rotar las etiquetas de los ejes de manera horizontal
+     xlab = "Index",          # Etiqueta del eje x
+     ylab = "Alturas",          # Etiqueta del eje y
+     cex.main = 1.5,          # Tamaño del título
+     cex.sub = 1.2,           # Tamaño del subtítulo
+     cex.lab = 1.2,           # Tamaño de las etiquetas de los ejes X e Y
+     cex.axis = 1,            # Tamaño de las etiquetas de los ticks de los ejes
+     font.sub = 1,            # Estilo de fuente del título sin formato
+     font.main  = 2,          # Estilo de fuente del subtítulo en negrita
+     font.axis = 3,           # Estilo de fuente de los ejes X e Y en cursiva
+     font.lab  = 4,           # Estilo de fuente de los ticks de los ejes en negrita y cursiva
+     pch  = 21,               # Estilo del símbolo de los puntos del grafico
+     bg = "red",              # Color de fondo del simbolo
+     col = "black",           # Color del borde del simbolo
+     cex = 1.2,               # Tamaño del símbolo
+     lwd = 1.2,               # Ancho del borde
+     col.main = "Orange",      # Color del título
+     col.sub = "blue",        # Color del subtítulo
+     col.lab = "orange",      # Color de las etiqetas de los ejes
+     col.axis = "maroon4",    # Color de las etiquetas de los ticks
+     fg = "green")            # Color de la caja
+lines(hmodel_1ola$height, col = "yellow") 
+
+#Para agregar una grilla es con la función "Grid"
+
+grid(nx = NULL, ny = NULL,    # Agrega una grilla a los ejes X e Y
+     lty = 2,                 # Tipo de línea
+     col = "gray",            # Color
+     lwd = 1)                 # Ancho de línea
+par(new = TRUE)
+
+```
+Este proceso de inclusión de clúster según el ploteo resultante es hasta llegar a un punto en donde los clúster se han unido coherentemente, pero luego le ha costado fundirse con otro clúster que es bastante diferente, entonces observamos un quiebre.
+El objetivo es encontrar ese punto de quiebre para cortar y a partir de ahí, contamos cuántos cluster tenemos,en este caso vemos que se puede observar un punto de quiebre pronunciado en la observación 194, pero si nos fijamos mása  detalle, se nota un quiebre de inicio en la observación 191.
+
+Bajo esa índole analizaremos qué valor de altura le corresponde a la observación 191:
+
+```{r}
+hmodel_1ola$height[191]
+```
+Entonces para una altura de 10.621 se obtienen 6 clúster.
+
+![Imagen](C:/Users/USER/Desktop/clase/NOVENO CICLO/PROGRAMACION II/ARCHIVOS ULTIMO TRABAJO DE R/Grafico_alturas_1ola_Linea.png)
+
+Entonces ploteamos el dendograma resultante
+```{r}
+
+par("bg")
+par(bg = "black")
+plot(hmodel_1ola,
+     main="Dendograma",# Título
+     las = 1,                 # Rotar las etiquetas de los ejes de manera horizontal
+     xlab = "Cluster",          # Etiqueta del eje x
+     ylab = "Alturas",          # Etiqueta del eje y
+     cex.main = 1.5,          # Tamaño del título
+     cex.sub = 1.2,           # Tamaño del subtítulo
+     cex.lab = 1.2,           # Tamaño de las etiquetas de los ejes X e Y
+     cex.axis = 1,            # Tamaño de las etiquetas de los ticks de los ejes
+     font.sub = 1,            # Estilo de fuente del título sin formato
+     font.main  = 2,          # Estilo de fuente del subtítulo en negrita
+     font.axis = 3,           # Estilo de fuente de los ejes X e Y en cursiva
+     font.lab  = 4,           # Estilo de fuente de los ticks de los ejes en negrita y cursiva
+     pch  = 21,               # Estilo del símbolo de los puntos del grafico
+     bg = "red",              # Color de fondo del simbolo
+     col = "white",           # Color del borde del simbolo
+     cex = 1.2,               # Tamaño del símbolo
+     lwd = 1.2,               # Ancho del borde
+     col.main = "Yellow",      # Color del título
+     col.sub = "blue",        # Color del subtítulo
+     col.lab = "orange",      # Color de las etiqetas de los ejes
+     col.axis = "maroon4",    # Color de las etiquetas de los ticks
+     fg = "green") 
+rect.hclust(hmodel_1ola, k = 6,
+            border = 3:4)
+```
+
+Entonces como resultado tenemos que el K óptimo es 6.
+
+
+## ANÁLISIS CLUSTER DE PARTICIONAMIENTO:
+
+Para el análisis cluster de particionamiento se aplicará el método de Kmeans++, pero antes de eso evaluaremos otra forma de determinar el K óptimo.
+
+Existen 3 formas principales para realizar el cálculo del K óptimo, estos son los siguientes:
+
+*a) MÉTODO DE LA SILUETA:*
+
+Este gráfico te indica cuánto es el valor óptimo, en función al que presenta mayor valor de silueta:
+
+```{r}
+factoextra::fviz_nbclust( 
+  output_scores_1ola, kmeans, method = "silhouette",#Usaremos el metodo de  la silueta
+  k.max = 20, #Establecemos el número de cluster máximo.
+  linecolor = "blue",
+  print.summary = TRUE
+)
+```
+
+Según este gráfico, el que presenta mayor valor de silueta es el número de clúster 2, es decir el K óptimos según este método sería de 2.
+
+
+*b) MÉTODO DEL CODO:*
+
+Este gráfico te indica cuánto es el valor óptimo, en función al punto de inflexión:
+
+```{r}
+factoextra::fviz_nbclust( 
+  output_scores_1ola, kmeans, method = "wss",#Usaremos el metodo de  sumas de cuadrados
+  k.max = 20 #Establecemos el número de cluster máximo.
+)
+```
+
+Según este gráfico, vemos que el punto de inflexión se encuentra en el cluster 2, por lo que el K óptimo sería 2.
+
+*c) MÉTODO DE LOS INDICADORES:*
+
+Este método te determina un conjunto de indicadores que te comentan la cantidad óptima de clusteres a formar:
+
+```{r, warning=FALSE, echo = FALSE}
+nb_1ola <- 
+  NbClust::NbClust(
+    data = as.matrix(output_scores_1ola), #Colocamos el resultado del PCA
+    diss = NULL, #Colocamos que sea nulo las distancia
+    distance = "euclidean", #Colocamos el método de distancia
+    min.nc = 2, #Colocar el mínimo número de clúster
+    max.nc = 20, #Colocar el máximo número de clúster
+    method = "kmeans",#Se coloca el método de agrupamiento que quieres realizar.
+    index = "all" #Si quieres generar todos los indicadores, colocas "all"
+  )
+
+factoextra::fviz_nbclust(nb_1ola)
+```
+
+Este gráfico te indica que existe 8 indicadores que determinan que el K óptimo sea 2.
+
+
+*ANALISIS DE CLUSTER CON PCA*
+
+Vamos a generar el gráfico entre las dos primeras componentes, para esta ocasión se colocará la data estandarizada y no los scores resultantes, dado que el modelo corre por debajo el PCA:
+
+```{r}
+#factoextra::fviz_cluster(
+  #object = model_1ola , #Insertamos la salida del modelo
+  #data = scale_data_1ola, #Insertamos la data original estandarizada
+  #ellipse.type = "euclid", #colocamos el tipo de elipse (pUEDE SER TAMBIEN CONVEX)
+  #outlier.color = "black" #colorea aquellas observaciones alejadas
+#)
+```
+
+Hay que resaltar que este gráfico no es un método de clusterización, lo que estamos observando es cuán heterogéneo son los individuos para las 2 primeras componentes.
+
+
+### APLICACIÓN DEL MÉTODO DE PARTICIONAMIENTO KMEANS++:
+
+Para realizar el método de particionamiento Kmeans ++, tenemos que establecer una semilla, dado que el centroide central es aleatorio.
+En este caso, comenzaremos con un K óptimo de 2:
+
+```{r}
+
+set.seed(2021) 
+model1_1ola <- 
+  LICORS::kmeanspp(
+    data = output_scores_1ola, #Colocar nuestros datos estandarizados o nuestros scores de las componentes que hemos retenido
+    k = 2, #Establecemos el k óptimo
+    start = "random", #Start es diferente que nstart, esto significa que te da a escoger que el primer centroide sea seleccionado de manera ramdom o que el centroide tenga un lugar especifico.
+    iter.max = 100,#Se coloca el número de iteraciones
+    nstart = 200,# Todos los modelos que se corran paralelamente, van a tener los mismo resultados. 
+    algorithm = "Hartigan-Wong", #Escogemos el algoritmo de kmeans.
+    trace = F  #Es como una especie de reporte que te genera acerca de las iteraciones, en este caso ponemos FALSE. 
+  )
+```
+
+
+Adicionalmente podemos tener estas informaciones:
+
+```{r}
+model1_1ola$withinss #Te muestra la suma de cuadrados intracuster
+model1_1ola$tot.withinss #Te muestra la suma de cuadrados intracluster total
+model1_1ola$betweenss #Te muestra la suma de cuadrados entre cluster (intercluster)
+model1_1ola$totss #Te muestra la suma de cuadrados entre cluster total
+model1_1ola$cluster #Te muestra los cluster resultantes
+model1_1ola$centers #Te muestra los centroides en coordenadas multidimensionales, estos centroides son los valores promedios de cada variable u observacion, son los centrioides finales.
+model1_1ola$inicial.centers #Te muestra los centroides iniciales
+model1_1ola$size #Te muestra la cantidad de individuos por cada cluster, en total debe salir 196
+
+```
+
+Por consiguiente, obtendremos el gráfico de silueta:
+
+*Valor de la silueta*
+
+```{r}
+sil_1ola <-cluster::silhouette(##Te calcula el valor de la silueta para cada individuo
+  model1_1ola$cluster, #Insertar los cluster del modelo
+  dist(output_scores_1ola)) #Insertar la matriz de distancia.
+
+```
+
+*Gráfico de la silueta*
+
+```{r}
+F1<-factoextra::fviz_silhouette(sil_1ola) +
+  coord_flip ()+
+  theme_bw()
+
+plot(F1)
+```
+
+En el eje "x" aparecen las variables, cada cluster tiene su valor de silueta promedio.
+Podemos decir que el valor promedio de silueta es de 0.52, lo que significa que presenta un alto valor, por lo que el método se ha clusterizado de manera correcta. Así mismo vemos que presenta valores de silueta negativos para algunas observaciones.
+
+Entonces otro método que te determinará el K óptimo es mediante los gráficos de la silueta, donde aquel resultado que presente la menor cantidad de observaciones negativas, será el resultado del K óptimo, para eso evaluaremos los siguientes clústeres:
+
+*Con 3 clúster*
+
+```{r}
+set.seed(2021) 
+model2_1ola <- 
+  LICORS::kmeanspp(
+    data = output_scores_1ola, 
+    k = 3, 
+    start = "random", 
+    iter.max = 100,
+    nstart = 200, 
+    algorithm = "Hartigan-Wong", 
+    trace = F  
+  )
+
+
+#VALORES DE SILUETA:
+sil2_1ola <-cluster::silhouette(
+  model2_1ola$cluster, 
+  dist(output_scores_1ola)) 
+
+
+#GRAFICANDO LA SILUETA:
+
+F2<-factoextra::fviz_silhouette(sil2_1ola) +
+  coord_flip () +
+  theme_bw()
+```
+
+
+*Con 4 clúster*
+
+```{r}
+set.seed(2021)
+model3_1ola <- 
+  LICORS::kmeanspp(
+    data = output_scores_1ola, 
+    k = 4, 
+    start = "random", 
+    iter.max = 100,
+    nstart = 200,
+    algorithm = "Hartigan-Wong", 
+    trace = F  
+  )
+
+
+#VALORES DE SILUETA:
+sil3_1ola <-cluster::silhouette(
+  model3_1ola$cluster, 
+  dist(output_scores_1ola)) 
+
+
+#GRAFICANDO LA SILUETA:
+
+F3<-factoextra::fviz_silhouette(sil3_1ola) +
+  coord_flip () +
+  theme_bw()
+```
+
+
+*Con 5 clúster*
+
+```{r}
+set.seed(2021) 
+
+model4_1ola <- 
+  LICORS::kmeanspp(
+    data = output_scores_1ola, 
+    k = 5, 
+    start = "random", 
+    iter.max = 100,
+    nstart = 200,
+    algorithm = "Hartigan-Wong", 
+    trace = F  
+  )
+
+
+#VALORES DE SILUETA:
+sil4_1ola <-cluster::silhouette(
+  model4_1ola$cluster, 
+  dist(output_scores_1ola))  
+
+
+#GRAFICANDO LA SILUETA:
+
+F4<-factoextra::fviz_silhouette(sil4_1ola) +
+  coord_flip () +
+  theme_bw()
+```
+
+
+*Con 6 clúster*
+
+```{r}
+
+set.seed(2021) 
+model5_1ola <- 
+  LICORS::kmeanspp(
+    data = output_scores_1ola,  
+    k = 6, 
+    start = "random", 
+    iter.max = 100,
+    nstart = 200,
+    algorithm = "Hartigan-Wong", 
+    trace = F  
+  )
+
+
+#VALORES DE SILUETA:
+sil5_1ola <-cluster::silhouette(
+  model5_1ola$cluster,
+  dist(output_scores_1ola)) 
+
+
+
+#GRAFICANDO LA SILUETA:
+
+F5<-factoextra::fviz_silhouette(sil5_1ola) +
+  coord_flip () +
+  theme_bw()
+```
+
+
+*Con 7 clúster*
+
+```{r}
+set.seed(2021) 
+
+model6_1ola <- 
+  LICORS::kmeanspp(
+    data = output_scores_1ola, 
+    k = 7, 
+    start = "random", 
+    iter.max = 100,
+    nstart = 200,
+    algorithm = "Hartigan-Wong", 
+    trace = F  
+  )
+
+
+#VALORES DE SILUETA:
+sil6_1ola <-cluster::silhouette(
+  model6_1ola$cluster, 
+  dist(output_scores_1ola)) 
+
+
+#GRAFICANDO LA SILUETA:
+
+F6<-factoextra::fviz_silhouette(sil6_1ola) +
+  coord_flip () +
+  theme_bw()
+
+```
+
+Por consiguiente, plotearemos en un solo gráficos las siluetas resultantes
+
+```{r}
+
+require(ggpubr)
+ggpubr::ggarrange(F1,F2,F3,F4,F5,F6)
+
+```
+
+Observamos que el gráfico que presenta menores valores de siluetas negativas el aquel que presenta 6 clústeres, por lo que el K óptimo es de 6.
+
+
+*ANÁLISIS DE CLUSTER CON PCA:*
+
+```{r}
+factoextra::fviz_cluster(
+  object = model5_1ola , #Insertamos la salida del modelo
+  data = scale_data_1ola, #Insertamos la data original estandarizada
+  ellipse.type = "convex", #colocamos el tipo de figura
+  outlier.color = "red" ,#colorea aquellas observaciones alejadas
+  ggtheme = theme_gray(),
+  main = "                    
+  Ploteo de los clústeres")
+```
+
+En este gráfico podemos observar el análisis de los 2 componentes con los 6 clústeres formados, hay que resaltar que el objetivo de este gráfico es observar cuán heterogéneo son los individuos para las 2 primeras componentes, así mismo hay que recordar que se coloca la data estandarizada y no los scores, debido a que este modelo te genera por debajo el PCA.
+
+
+
+*Resultado del análisis clúster*
+
+En la parte final, vamos a obtener una tabla resultante:
+
+```{r}
+Output2_1ola<- cbind(Data_1_Ola["PROVINCIA"]) %>% 
+  dplyr::bind_cols(output_scores_1ola, cluster = model5_1ola$cluster) %>% 
+  cbind(Indice_scores_1ola["Indice"]) %>% 
+  cbind(Data_1_Ola) %>% 
+  dplyr::select(c( ,-6))
+
+head(Output2_1ola)
+```
+
+
+*Ploteando el resultado*
+
+Una vez obtenida la tabla resultante, se procederá a crear un mapa con el resultado de la clasterización:
+
+
+```{r}
+#Cargamos el Shp de Provincias:
+SHP_1ola <- st_read("Provincia/PROVINCIA_FINAL.shp")
+
+#Unimos la tabla resultante con el shp de provincia:
+SHP_FINAL_1OLA<-Output2_1ola %>% 
+  left_join(SHP_1ola, by = "PROVINCIA")
+
+
+#Ploteando
+
+Mapa_1ola<-st_sf(SHP_FINAL_1OLA) %>% 
+  dplyr::select(cluster,PROVINCIA) 
+
+ggplot(Mapa_1ola) +
+  geom_sf(aes(fill = cluster))+
+  labs(title = "Mapa de clusterización de la primera ola",
+       caption = "Elaboración propia",
+       x="Longitud",
+       y="Latitud") +
+  scale_fill_gradientn("Clúster", colours = c("orange","yellow","green","blue","Turquoise","pink"))+
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, size = 9, face = "bold"))
+        
+```
+
+
+*VALIDACIÓN DEL ANÁLISIS CLUSTER*
+
+**INDICE DE DAVIES-BOULDING**
+
+Este índice te dice que mientras sea más cercano a cero, el proceso de clusterización sería óptimo.
+
+
+```{r}
+grupo_1ola <- model5_1ola$cluster
+
+index <- clusterSim::index.DB(
+  output_scores_1ola, #Ingresamos las datas estandarizadas o los scores retenidos
+  grupo_1ola, #Ingresamos los cluster resultantes
+  centrotypes = "centroids" # ingresamos el centro que se medira, en este caso de los centroides
+)
+
+
+#OBTENIENDO EL INDICE:
+index$DB
+```
+
+En este caso vemos que el valor supera al 1, pero hay que recordar que solo es un indicador que no debe sesgar el resultado, por lo que validamos el proceso de clusterización mediante el gráfico de la silueta.
+
+
+**INDICE DE DUNN**
+
+Este índice te dice que mientras el valor sea más grande, el proceso de clusterización sería óptimo.
+
+
+```{r}
+
+clValid::dunn(
+  Data = output_scores_1ola, #Ingresamos las datas estandarizadas o los scores retenidos
+  cluster = grupo_1ola, #Ingresamos los cluster resultantes
+  distance = NULL 
+)
+
+```
+
+El índice de DAM tiene que ser lo más grande posible, es al contrario del anterior índice de DAVIES-BOULDING, en este caso vemos que el valor es cercano a 0, pero de la misma manera, solo es un indicador que no debe sesgar el resultado, por lo que validamos el proceso de clusterización mediante el gráfico de la silueta.
+
+## Análisis cluster
+
+### Gráficos 
+
+Cargar las variables almacenadas en el archivo [Rdata](graf_anaR.RData)
+
+```{r cars}
+load("Analisis2.RData")
+```
+Fallecidos masculinos: 
+
+```{r}
+G1
+```
+
+Altitudes: 
+
+```{r}
+G2
+```
+Fallecidos masculinos: 
+
+```{r}
+G3
+```
+
+Fallecidos masculinos: 
+
+```{r}
+G4
+```
+Fallecidos masculinos: 
+
+```{r}
+G5
+```
+
+Fallecidos masculinos: 
+
+```{r}
+G6
+```
+Población con edad entre 15 a 64 años: 
+
+```{r}
+G7
+```
+
+Pobreza: 
+
+```{r}
+G8
+```
+Pobreza extrema: 
+
+```{r}
+G9
+```
+Población con edad superior a 65 años: 
+
+```{r}
+G10
+```
+
+Unidad de cuidados intensivos(UCI), por hospital: 
+
+```{r}
+G11
+```
+Unidad de cuidados intensivos(UCI) intermedio, por hospital: 
+
+```{r}
+G12
+```
+
+Cantidad de ventiladores por hospital: 
+
+```{r}
+G13
+```
+
+
